@@ -1,5 +1,5 @@
 .header-container{
-    background-image: url('/assets/header.png');
+    background-image: url('/assets/header.png')!important;
     background-size: cover;
     background-position: center;
     height: 200px;
