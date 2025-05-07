@@ -3,6 +3,7 @@
     flex-direction: column;
     height: 100vh;
 }
-.head{
+.head{  
+    background-color: #fafafa;
     flex: 1;
 }

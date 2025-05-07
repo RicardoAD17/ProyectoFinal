@@ -1,0 +1,26 @@
+.fondo-container {
+    margin: 0;
+    background-color: #fafafa;
+    color: white;
+  }
+  
+h1{
+    padding: 30px;
+    text-shadow: 2px 2px 4px rgba(196, 193, 193, 0.7);
+    color: grey;
+    font-size: 60px;
+}
+h2{
+    color: gray;
+    font-size: 30px;
+}
+h5{
+    font-size: 24px;
+}
+.card {
+    text-shadow: 2px 2px 4px rgba(184, 182, 182, 0.7);
+    font-style:bold;
+    color:#2973B2;
+    background-color:rgb(230, 223, 223);
+    height: 150px;
+}
