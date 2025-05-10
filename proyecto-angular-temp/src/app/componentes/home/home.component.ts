@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { GaleriaComponent } from '../../galeria/galeria.component';
 import { OfertadepComponent } from '../ofertadep/ofertadep.component';
+import { GaleriaComponent } from '../galeria/galeria.component';
 
 @Component({
   selector: 'app-home',
