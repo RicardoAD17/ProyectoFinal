@@ -4,7 +4,8 @@ import { FooterComponent } from './componentes/footer/footer.component';
 import { NavbarComponent } from './componentes/navbar/navbar.component';
 import { HeaderComponent } from './componentes/header/header.component';
 import { OfertadepComponent } from './componentes/ofertadep/ofertadep.component';
-import { GaleriaComponent } from './galeria/galeria.component';
+import { GaleriaComponent } from './componentes/galeria/galeria.component';
+
 
 @Component({
   selector: 'app-root',
