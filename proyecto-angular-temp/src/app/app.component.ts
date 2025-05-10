@@ -7,6 +7,7 @@ import { OfertadepComponent } from './componentes/ofertadep/ofertadep.component'
 import { GaleriaComponent } from './componentes/galeria/galeria.component';
 
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, FooterComponent,NavbarComponent,HeaderComponent,OfertadepComponent,GaleriaComponent],
