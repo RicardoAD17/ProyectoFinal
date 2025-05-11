@@ -2,6 +2,7 @@
 import { OfertadepComponent } from '../ofertadep/ofertadep.component';
 import { GaleriaComponent } from '../galeria/galeria.component';
 import { UbicacionComponent } from '../ubicacion/ubicacion.component';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -10,5 +11,4 @@ import { UbicacionComponent } from '../ubicacion/ubicacion.component';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-
 }
