@@ -6,8 +6,16 @@ body, html {
   font-family: Arial, sans-serif;
   height: 100%;
 }
-
+.seccion{
+    background-image: url("/assets/fondocards.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.planes{
+  background: local;
+}
 .formulario {
+  background: local;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -6,7 +6,7 @@
 }
 .texto{
     background-color:#fafafa ;
-    font-style:bold;
+    font-weight: bolder;
     text-shadow: 2px 2px 4px #b4afafb3;
     color: #ffbf00;
     font-size: 60px;
@@ -20,6 +20,7 @@
     margin: 50px;
 }
 .info {
+    font-size: 25px;
     flex: 2;
     margin: 100px;
     display: flex;
@@ -27,6 +28,8 @@
     align-items:start;
 }
 .info h1{
+
+    font-weight: bolder;
     text-shadow: 2px 2px 4px #b4afafb3;
     color: #ffbf00;
 }

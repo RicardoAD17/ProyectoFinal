@@ -1,8 +1,5 @@
 .conteiner-flex{
-    background-image: url("/assets/fondocards.svg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-color: #fefefe;
+    background: local;
     height: 100vh;
     padding: 5rem;
     align-items: center;
