@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Queja } from '../queja.interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-nosotros',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,CommonModule],
   templateUrl: './nosotros.component.html',
   styleUrl: './nosotros.component.css'
 })

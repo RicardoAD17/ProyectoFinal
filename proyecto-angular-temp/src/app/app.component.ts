@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from './componentes/footer/footer.component';
 import { NavbarComponent } from './componentes/navbar/navbar.component';
 import { HeaderComponent } from './componentes/header/header.component';
 import { OfertadepComponent } from './componentes/ofertadep/ofertadep.component';
 import { GaleriaComponent } from './componentes/galeria/galeria.component';
+import * as AOS from 'aos';
 
 
 
@@ -16,4 +17,8 @@ import { GaleriaComponent } from './componentes/galeria/galeria.component';
 })
 export class AppComponent {
   title = 'proyecto-angular-temp';
+
+  ngOnInit() {
+    AOS.init();
+  }
 }
