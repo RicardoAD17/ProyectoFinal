@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Queja } from '../queja.interface';
 import { CommonModule } from '@angular/common';
+import { EquipoService, Integrante } from '../equipo.service';
 
 @Component({
   selector: 'app-nosotros',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './nosotros.component.css'
 })
 export class NosotrosComponent {
+  integrantes: Integrante[] = [];
   queja: Queja = {
     nombre: '',
     correo: '',
@@ -24,6 +26,12 @@ export class NosotrosComponent {
   motivos: string[] = ['Instalaciones', 'Entrenadores', 'Cobros', 'Otros'];
   opcionesDisponibles: string[] = ['Ruido excesivo', 'Malos tratos', 'Equipos dañados'];
   submitted = false;
+
+  constructor(private equipoService: EquipoService) {}
+
+  ngOnInit(): void {
+    this.integrantes = this.equipoService.getIntegrantes();
+  }
 
   isValid(): boolean {
     return (
