@@ -1,4 +1,8 @@
-
+<div class="planes">
+    <app-planes></app-planes>
+</div>
+<div class="formulario">
+  
 <form [formGroup]="suscripcionForm" (ngSubmit)="onSubmit()" class="form-container">
   <div class="form-group">
     <label for="nombre">Nombre completo:</label>
@@ -91,3 +95,5 @@
 
   <button type="submit" [disabled]="suscripcionForm.invalid">Suscribirse</button>
 </form>
+
+</div>

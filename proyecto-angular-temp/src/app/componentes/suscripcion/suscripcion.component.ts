@@ -3,10 +3,11 @@ import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
+import { PlanesComponent } from '../planes/planes.component';
 
 @Component({
   selector: 'app-suscripcion',
-  imports: [CommonModule,ReactiveFormsModule,RouterOutlet],
+  imports: [CommonModule,ReactiveFormsModule,RouterOutlet,PlanesComponent],
   templateUrl: './suscripcion.component.html',
   styleUrl: './suscripcion.component.css'
 })

@@ -1,14 +1,16 @@
 .container-flex {
+    background-color:#fafafa ;
     display: flex;
     gap: 2rem; /* Espacio entre galería e info */
     align-items: center; /* Centra verticalmente los hijos */
 }
 .texto{
+    background-color:#fafafa ;
     font-style:bold;
-    text-shadow: 2px 2px 4px rgba(196, 193, 193, 0.7);
-    color: grey;
+    text-shadow: 2px 2px 4px #b4afafb3;
+    color: #ffbf00;
     font-size: 60px;
-    margin: 50px;
+    padding: 50px;
     text-align: center;
 }
 #map{
@@ -23,6 +25,10 @@
     display: flex;
     justify-content:left;
     align-items:start;
+}
+.info h1{
+    text-shadow: 2px 2px 4px #b4afafb3;
+    color: #ffbf00;
 }
 .info .card{
     background: local;
