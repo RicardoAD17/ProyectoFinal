@@ -30,6 +30,7 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "node_modules/sweetalert2/dist/sweetalert2.min.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/leaflet/dist/leaflet.css",
               "src/styles.css"
             ],
             "scripts": [
