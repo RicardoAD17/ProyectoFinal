@@ -1,7 +1,12 @@
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+<div class="container mx-auto px-4 py-8">
+  <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Nuestros Cursos</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    @for (curso of cursos; track curso.id) {
       <app-curso-card
-        *ngFor="let curso of cursos"
         [curso]="curso"
-        (seleccionar)="manejarSeleccion($event)">
+        (seleccionar)="manejarSeleccion(curso)">
       </app-curso-card>
+    }
+  </div>
 </div>
