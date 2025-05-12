@@ -7,7 +7,7 @@ import { PlanesComponent } from '../planes/planes.component';
 
 @Component({
   selector: 'app-suscripcion',
-  imports: [CommonModule,ReactiveFormsModule,RouterOutlet,PlanesComponent],
+  imports: [CommonModule,ReactiveFormsModule,PlanesComponent],
   templateUrl: './suscripcion.component.html',
   styleUrl: './suscripcion.component.css'
 })

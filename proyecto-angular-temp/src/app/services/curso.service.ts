@@ -1,19 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-export interface Curso{
-  id:number,
+import { map } from 'rxjs/operators';
+export interface Curso {
+  id: number;
   nombre: string;
   descripcion: string;
   duracion: string;
   intensidad: string;
   imagen: string;
+
+  categoria?: string;
+  requisitos?: string;
+  instructor?: string;
+  cupos?: number;
+  ubicacion?: string;
+  horarios?: string[];
+  beneficios?: string[];
 }
 @Injectable({
   providedIn: 'root'
 })
 export class CursoService {
-  private apiUrl="https://cursosgym.free.beeceptor.com"
+  private apiUrl="https://cursos.free.beeceptor.com"
 
   constructor( private http: HttpClient) {
     
@@ -21,4 +30,12 @@ export class CursoService {
    obtenerCursos(): Observable<Curso[]> {
     return this.http.get<Curso[]>(this.apiUrl);
   }
+  obtenerCursoPorId(id: string): Observable<Curso> {
+    return this.http.get<Curso[]>(this.apiUrl).pipe(
+      map((cursos: Curso[]) => cursos.find((c: Curso) => c.id === Number(id)) as Curso)
+
+    );
+  }
+
+
 }
