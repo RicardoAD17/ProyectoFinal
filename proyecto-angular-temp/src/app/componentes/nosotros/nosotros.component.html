@@ -25,7 +25,12 @@
     <div class="mb-3">
       <label for="nombre" class="form-label">Nombre:</label>
       <input type="text" id="nombre" name="nombre" class="form-control"
-             required [(ngModel)]="queja.nombre" #nombre="ngModel">
+       required minlength="3" [(ngModel)]="queja.nombre" #nombre="ngModel">
+@if (submitted && (nombre.invalid || nombre.errors?.['minlength'])) {
+  <div class="text-danger mt-2">
+    El nombre debe tener al menos 3 caracteres.
+  </div>
+}
       @if (submitted && nombre.invalid) {
         <div class="text-danger mt-2">
           El nombre es obligatorio.
@@ -103,9 +108,10 @@
     </div>
 
     <!-- Botón de Envío -->
-    <button type="submit" class="btn btn-primary" >
-      Enviar Queja
+    <button [disabled]="!isValid()" type="submit">
+      {{ editando ? 'Actualizar Queja' : 'Enviar Queja' }}
     </button>
+
   </fieldset>
 </form>
 </div>

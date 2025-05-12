@@ -15,6 +15,8 @@ export class SuscripcionComponent {
   suscripcionForm: FormGroup;
   planes = ['Básico', 'Intermedio', 'Avanzado'];
   objetivos = ['Perder peso', 'Ganar masa muscular', 'Mantener condición'];
+  editando = false;
+indiceEditando = -1;
 
   constructor(private fb: FormBuilder) {
     const fechaMinima = new Date();
@@ -30,6 +32,35 @@ export class SuscripcionComponent {
       genero: ['', Validators.required],
     });
   }
+
+ngOnInit() {
+  const registro = localStorage.getItem('registroEditando');
+  if (registro) {
+    const { tipo, index } = JSON.parse(registro);
+    if (tipo === 'suscripcion') {
+      const suscripciones = JSON.parse(localStorage.getItem('suscripciones') || '[]');
+      const datos = suscripciones[index];
+      if (datos) {
+        this.editando = true;
+        this.indiceEditando = index;
+        this.suscripcionForm.patchValue({
+          nombre: datos.nombre,
+          correo: datos.correo,
+          fecha: datos.fecha,
+          plan: datos.plan,
+          genero: datos.genero
+        });
+
+        // Setear checkboxes de objetivos:
+        datos.objetivos.forEach((valor: boolean, i: number) => {
+          (this.objetivosFormArray.at(i) as any).setValue(valor);
+        });
+      }
+    }
+  }
+}
+
+  
 
   buildObjetivos(): FormArray {
     return this.fb.array(
@@ -57,16 +88,26 @@ export class SuscripcionComponent {
   }
 onSubmit() {
   if (this.suscripcionForm.valid) {
-    const suscripcionesPrevias = JSON.parse(localStorage.getItem('suscripciones') || '[]');
-    suscripcionesPrevias.push(this.suscripcionForm.value);
-    localStorage.setItem('suscripciones', JSON.stringify(suscripcionesPrevias));
+    const suscripciones = JSON.parse(localStorage.getItem('suscripciones') || '[]');
+    if (this.editando && this.indiceEditando > -1) {
+      suscripciones[this.indiceEditando] = this.suscripcionForm.value;
+    } else {
+      suscripciones.push(this.suscripcionForm.value);
+    }
+    localStorage.setItem('suscripciones', JSON.stringify(suscripciones));
+    localStorage.removeItem('registroEditando');
+
     Swal.fire({
       icon: 'success',
-      title: '¡Registro exitoso!',
-      text: 'Tu suscripción ha sido registrada correctamente.',
+      title: this.editando ? '¡Registro actualizado!' : '¡Registro exitoso!',
+      text: this.editando
+        ? 'La suscripción ha sido actualizada correctamente.'
+        : 'Tu suscripción ha sido registrada correctamente.',
     });
     this.suscripcionForm.reset();
+    this.editando = false;
+    this.indiceEditando = -1;
   }
-}
 
+}
 }

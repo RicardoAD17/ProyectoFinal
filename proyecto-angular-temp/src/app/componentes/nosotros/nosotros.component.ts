@@ -26,12 +26,30 @@ export class NosotrosComponent {
   motivos: string[] = ['Instalaciones', 'Entrenadores', 'Cobros', 'Otros'];
   opcionesDisponibles: string[] = ['Ruido excesivo', 'Malos tratos', 'Equipos dañados'];
   submitted = false;
+  editando = false;
+  indiceEditando = -1;
+
 
   constructor(private equipoService: EquipoService) {}
 
   ngOnInit(): void {
-    this.integrantes = this.equipoService.getIntegrantes();
+  this.integrantes = this.equipoService.getIntegrantes();
+
+  const registro = localStorage.getItem('registroEditando');
+  if (registro) {
+    const { tipo, index } = JSON.parse(registro);
+    if (tipo === 'queja') {
+      const quejas = JSON.parse(localStorage.getItem('quejas') || '[]');
+      const datos = quejas[index];
+      if (datos) {
+        this.editando = true;
+        this.indiceEditando = index;
+        this.queja = { ...datos }; // copia segura
+      }
+    }
   }
+}
+
 
   isValid(): boolean {
     return (
@@ -56,27 +74,39 @@ export class NosotrosComponent {
   }
 
     onSubmit() {
-      this.submitted = true;
-      if (this.isValid()) {
-        const quejasGuardadas = JSON.parse(localStorage.getItem('quejas') || '[]');
-        quejasGuardadas.push(this.queja);
-        localStorage.setItem('quejas', JSON.stringify(quejasGuardadas));
-        Swal.fire({
-          icon: 'success',
-          title: '¡Queja registrada!',
-          text: 'Gracias por compartir tu opinión. Trabajaremos en ello.',
-        });
-        this.queja = {
-          nombre: '',
-          correo: '',
-          motivo: '',
-          fecha: '',
-          opciones: [],
-          gravedad: ''
-        };
-        this.submitted = false;
-      }
+  this.submitted = true;
+  if (this.isValid()) {
+    const quejasGuardadas = JSON.parse(localStorage.getItem('quejas') || '[]');
+    if (this.editando && this.indiceEditando > -1) {
+      quejasGuardadas[this.indiceEditando] = this.queja;
+    } else {
+      quejasGuardadas.push(this.queja);
     }
+    localStorage.setItem('quejas', JSON.stringify(quejasGuardadas));
+    localStorage.removeItem('registroEditando');
+
+    Swal.fire({
+      icon: 'success',
+      title: this.editando ? '¡Queja actualizada!' : '¡Queja registrada!',
+      text: this.editando
+        ? 'Tu queja ha sido actualizada correctamente.'
+        : 'Gracias por compartir tu opinión. Trabajaremos en ello.',
+    });
+
+    this.queja = {
+      nombre: '',
+      correo: '',
+      motivo: '',
+      fecha: '',
+      opciones: [],
+      gravedad: ''
+    };
+    this.submitted = false;
+    this.editando = false;
+    this.indiceEditando = -1;
+  }
+}
+
 
 
 

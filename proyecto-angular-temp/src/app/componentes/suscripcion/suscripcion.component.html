@@ -82,19 +82,22 @@
   <div class="form-group">
     <label for="fechaInicio">Fecha de inicio:</label>
     <input id="fechaInicio" type="date" formControlName="fecha" />
-    @if (suscripcionForm.get('fechaInicio')?.touched && suscripcionForm.get('fechaInicio')?.invalid) {
-      <div class="error">
-        @if (suscripcionForm.get('fechaInicio')?.errors?.['required']) {
-          La fecha es obligatoria.
-        }
-        @if (suscripcionForm.get('fechaInicio')?.errors?.['fechaInvalida']) {
-          No puedes elegir una fecha anterior a hoy.
-        }
-      </div>
+    @if (suscripcionForm.get('fecha')?.touched && suscripcionForm.get('fecha')?.invalid) {
+  <div class="error">
+    @if (suscripcionForm.get('fecha')?.errors?.['required']) {
+      La fecha es obligatoria.
+    }
+    @if (suscripcionForm.get('fecha')?.errors?.['fechaInvalida']) {
+      No puedes elegir una fecha anterior a hoy.
     }
   </div>
+}
+  </div>
 
-  <button type="submit" [disabled]="suscripcionForm.invalid">Suscribirse</button>
+  <button type="submit" [disabled]="suscripcionForm.invalid">
+  {{ editando ? 'Actualizar suscripción' : 'Suscribirse' }}
+</button>
+
 </form>
 
 </div>

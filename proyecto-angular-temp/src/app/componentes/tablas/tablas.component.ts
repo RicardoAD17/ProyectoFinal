@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import { EquipoService, Integrante } from '../equipo.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tablas',
@@ -14,7 +15,7 @@ export class TablasComponent {
    suscripciones: any[] = [];
   quejas: any[] = [];
 
-  constructor(private equipoService: EquipoService) {
+  constructor(private equipoService: EquipoService,private router: Router) {
     this.cargarDatos();
   }
 
@@ -61,11 +62,15 @@ eliminarQueja(index: number) {
   });
 }
 
-  editarSuscripcion(index: number) {
-    Swal.fire('Función no implementada', 'Aquí podrías redirigir al formulario para editar.', 'info');
-  }
+  
 
-  editarQueja(index: number) {
-    Swal.fire('Función no implementada', 'Aquí podrías redirigir al formulario para editar.', 'info');
+editarRegistro(tipo: 'suscripcion' | 'queja', index: number) {
+  localStorage.setItem('registroEditando', JSON.stringify({ tipo, index }));
+
+  if (tipo === 'suscripcion') {
+    this.router.navigate(['/suscripcion']);
+  } else if (tipo === 'queja') {
+    this.router.navigate(['/nosotros']);
   }
+}
 }

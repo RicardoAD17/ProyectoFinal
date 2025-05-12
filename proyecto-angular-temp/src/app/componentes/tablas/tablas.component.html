@@ -32,7 +32,7 @@
             </td>
             <td>{{ suscripcion.genero }}</td>
             <td>
-              <button (click)="editarSuscripcion(i)">Editar</button>
+              <button (click)="editarRegistro('suscripcion', i)">Editar</button>
               <button (click)="eliminarSuscripcion(i)">Eliminar</button>
             </td>
           </tr>
@@ -76,7 +76,7 @@
             </td>
             <td>{{ queja.gravedad }}</td>
             <td>
-              <button (click)="editarQueja(i)">Editar</button>
+              <button (click)="editarRegistro('queja', i)">Editar</button>
               <button (click)="eliminarQueja(i)">Eliminar</button>
             </td>
           </tr>
