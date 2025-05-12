@@ -14,35 +14,47 @@ declare var bootstrap: any;
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  admin = { email: '', password: '' };
+  admin = { username: '', password: '' };
+  currentAdmin: { username: string, nombre: string } | null = null;
   loginError = false;
+
   validAdmins = [
-    { email: 'admin@gym.com', password: 'admin123' },
-    { email: 'entrenador@gym.com', password: 'fit456' }
+    { username: 'admin1', password: 'admin123', nombre: 'Jaime López' },
+    { username: 'admin2', password: 'clave456', nombre: 'Ricardo Almada' },
+    { username: 'entrenador', password: 'fit789', nombre: 'Diego Saldaña' }
   ];
 
-  loginExitoso = false;
+  login() {
+    const found = this.validAdmins.find(
+      user => user.username === this.admin.username && user.password === this.admin.password
+    );
 
-login() {
-  const found = this.validAdmins.find(
-    user => user.email === this.admin.email && user.password === this.admin.password
-  );
+    if (found) {
+      this.currentAdmin = { username: found.username, nombre: found.nombre };
+      this.loginError = false;
 
-  this.loginExitoso = !!found;
-  this.loginError = !this.loginExitoso;
+      Swal.fire({
+        icon: 'success',
+        title: '¡Inicio de sesión exitoso!',
+        text: `Bienvenido, ${found.nombre}`
+      }).then(() => {
+        const modalElement = document.getElementById('adminLoginModal');
+        if (modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement);
+          modalInstance?.hide();
+        }
+      });
+    } else {
+      this.loginError = true;
+    }
+  }
 
-  if (this.loginExitoso) {
+  logout() {
+    this.currentAdmin = null;
     Swal.fire({
-      icon: 'success',
-      title: '¡Inicio de sesión exitoso!',
-      text: 'Bienvenido!.'
-    }).then(() => {
-      const modalElement = document.getElementById('adminLoginModal');
-      if (modalElement) {
-        const modalInstance = bootstrap.Modal.getInstance(modalElement);
-        modalInstance?.hide();
-      }
+      icon: 'info',
+      title: 'Sesión cerrada',
+      text: 'Has cerrado la sesión exitosamente.'
     });
   }
-}
 }
