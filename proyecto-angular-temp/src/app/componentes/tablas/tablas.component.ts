@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
+import { EquipoService, Integrante } from '../equipo.service';
 
 @Component({
   selector: 'app-tablas',
@@ -9,24 +10,22 @@ import Swal from 'sweetalert2';
   styleUrl: './tablas.component.css'
 })
 export class TablasComponent {
+  integrantes: Integrante[]=[];
    suscripciones: any[] = [];
   quejas: any[] = [];
 
-  constructor() {
+  constructor(private equipoService: EquipoService) {
     this.cargarDatos();
   }
 
   cargarDatos() {
-    const suscripcion = localStorage.getItem('suscripcion');
-    if (suscripcion) {
-      this.suscripciones = [JSON.parse(suscripcion)];
-    }
+        const datosSuscripciones = localStorage.getItem('suscripciones');
+      this.suscripciones = datosSuscripciones ? JSON.parse(datosSuscripciones) : [];
 
-    const queja = localStorage.getItem('quejaGimnasio');
-    if (queja) {
-      this.quejas = [JSON.parse(queja)];
+      this.integrantes = this.equipoService.getIntegrantes();
+      const datos = localStorage.getItem('quejas');
+      this.quejas = datos ? JSON.parse(datos) : [];
     }
-  }
 
   eliminarSuscripcion(index: number) {
     Swal.fire({
@@ -45,22 +44,22 @@ export class TablasComponent {
     });
   }
 
-  eliminarQueja(index: number) {
-    Swal.fire({
-      title: '¿Eliminar queja?',
-      text: 'Esta acción no se puede deshacer.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then(result => {
-      if (result.isConfirmed) {
-        this.quejas.splice(index, 1);
-        localStorage.removeItem('quejaGimnasio');
-        Swal.fire('Eliminada', 'La queja ha sido eliminada.', 'success');
-      }
-    });
-  }
+eliminarQueja(index: number) {
+  Swal.fire({
+    title: '¿Eliminar queja?',
+    text: 'Esta acción no se puede deshacer.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then(result => {
+    if (result.isConfirmed) {
+      this.quejas.splice(index, 1);
+      localStorage.setItem('quejas', JSON.stringify(this.quejas)); // ✅ Guarda el nuevo arreglo actualizado
+      Swal.fire('Eliminada', 'La queja ha sido eliminada.', 'success');
+    }
+  });
+}
 
   editarSuscripcion(index: number) {
     Swal.fire('Función no implementada', 'Aquí podrías redirigir al formulario para editar.', 'info');

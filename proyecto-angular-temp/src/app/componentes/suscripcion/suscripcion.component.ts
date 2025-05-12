@@ -55,16 +55,18 @@ export class SuscripcionComponent {
   get objetivosFormArray() {
     return this.suscripcionForm.get('objetivos') as FormArray;
   }
-
-  onSubmit() {
-    if (this.suscripcionForm.valid) {
-      localStorage.setItem('suscripcion', JSON.stringify(this.suscripcionForm.value));
-      Swal.fire({
-        icon: 'success',
-        title: '¡Registro exitoso!',
-        text: 'Tu suscripción ha sido registrada correctamente.',
-      });
-      this.suscripcionForm.reset();
-    }
+onSubmit() {
+  if (this.suscripcionForm.valid) {
+    const suscripcionesPrevias = JSON.parse(localStorage.getItem('suscripciones') || '[]');
+    suscripcionesPrevias.push(this.suscripcionForm.value);
+    localStorage.setItem('suscripciones', JSON.stringify(suscripcionesPrevias));
+    Swal.fire({
+      icon: 'success',
+      title: '¡Registro exitoso!',
+      text: 'Tu suscripción ha sido registrada correctamente.',
+    });
+    this.suscripcionForm.reset();
   }
+}
+
 }

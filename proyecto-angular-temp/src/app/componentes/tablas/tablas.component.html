@@ -69,7 +69,7 @@
             <td>{{ queja.fecha }}</td>
             <td>
               <ul>
-                @for (opcion of queja.opciones; track opcion) {
+                @for (opcion of queja.opciones; let j = $index; track $index){
                   <li>{{ opcion }}</li>
                 }
               </ul>

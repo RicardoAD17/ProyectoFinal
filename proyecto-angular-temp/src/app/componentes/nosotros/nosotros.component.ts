@@ -55,26 +55,30 @@ export class NosotrosComponent {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
-  onSubmit() {
-    this.submitted = true;
-    if (this.isValid()) {
-      localStorage.setItem('quejaGimnasio', JSON.stringify(this.queja));
-      Swal.fire({
-        icon: 'success',
-        title: '¡Queja registrada!',
-        text: 'Gracias por compartir tu opinión. Trabajaremos en ello.',
-      });
-      this.queja = {
-        nombre: '',
-        correo: '',
-        motivo: '',
-        fecha: '',
-        opciones: [],
-        gravedad: ''
-      };
-      this.submitted = false;
+    onSubmit() {
+      this.submitted = true;
+      if (this.isValid()) {
+        const quejasGuardadas = JSON.parse(localStorage.getItem('quejas') || '[]');
+        quejasGuardadas.push(this.queja);
+        localStorage.setItem('quejas', JSON.stringify(quejasGuardadas));
+        Swal.fire({
+          icon: 'success',
+          title: '¡Queja registrada!',
+          text: 'Gracias por compartir tu opinión. Trabajaremos en ello.',
+        });
+        this.queja = {
+          nombre: '',
+          correo: '',
+          motivo: '',
+          fecha: '',
+          opciones: [],
+          gravedad: ''
+        };
+        this.submitted = false;
+      }
     }
-  }
+
+
 
   tieneOpcionesSeleccionadas(): boolean {
   return this.queja.opciones.some(o => o);
