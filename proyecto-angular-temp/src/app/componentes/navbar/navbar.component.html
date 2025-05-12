@@ -29,7 +29,7 @@
             <span class="fw-bold text-success">👤 {{ currentAdmin.nombre }}</span>
           </li>
           <li class="nav-item">
-            <button class="btn btn-outline-danger btn-sm" (click)="logout()">Logout</button>
+            <button class="btn btn-outline-danger btn-sm" (click)="logout()" routerLink="/inicio">Logout</button>
           </li>
         } @else {
           <li class="nav-item">
