@@ -25,10 +25,10 @@
     <div class="mb-3">
       <label for="nombre" class="form-label">Nombre:</label>
       <input type="text" id="nombre" name="nombre" class="form-control"
-       required minlength="3" [(ngModel)]="queja.nombre" #nombre="ngModel">
+       required minlength="10" [(ngModel)]="queja.nombre" #nombre="ngModel">
 @if (submitted && (nombre.invalid || nombre.errors?.['minlength'])) {
   <div class="text-danger mt-2">
-    El nombre debe tener al menos 3 caracteres.
+    El nombre debe tener al menos 10 caracteres.
   </div>
 }
       @if (submitted && nombre.invalid) {
@@ -40,22 +40,28 @@
 
     <!-- Correo -->
     <div class="mb-3">
-      <label for="correo" class="form-label">Correo electrónico:</label>
-      <input type="email" id="correo" name="correo" class="form-control"
-             required [(ngModel)]="queja.correo" #correo="ngModel">
-      @if (submitted && correo.invalid) {
-        <div class="text-danger mt-2">
-          El correo electrónico es obligatorio y debe ser válido.
-        </div>
-      }
+  <label for="correo" class="form-label">Correo electrónico:</label>
+  <input type="email" id="correo" name="correo" class="form-control"
+         required [(ngModel)]="queja.correo" #correo="ngModel">
+  @if (submitted && correo.errors?.['required']) {
+    <div class="text-danger mt-2">
+      El correo electrónico es obligatorio.
     </div>
+  }
+  @if (submitted && correo.value && !validateEmail(correo.value)) {
+    <div class="text-danger mt-2">
+      El correo electrónico no es válido.
+    </div>
+  }
+</div>
 
     <!-- Fecha -->
     <div class="mb-3">
       <label for="fecha" class="form-label">Fecha del evento:</label>
       <input type="date" id="fecha" name="fecha" class="form-control"
-             required [(ngModel)]="queja.fecha" #fecha="ngModel"
-             [max]="hoy">
+       required [(ngModel)]="queja.fecha" #fecha="ngModel"
+       [min]="hoy">
+
       @if (submitted && fecha.invalid) {
         <div class="text-danger mt-2">
           La fecha es obligatoria.
@@ -67,12 +73,18 @@
     <div class="mb-3">
       <label for="motivo" class="form-label">Mensaje:</label>
       <textarea id="motivo" name="motivo" class="form-control"
-                required [(ngModel)]="queja.motivo" #mensaje="ngModel"></textarea>
-      @if (submitted && mensaje.invalid) {
-        <div class="text-danger mt-2">
-          El mensaje es obligatorio.
-        </div>
-      }
+                required [(ngModel)]="queja.motivo" #mensaje="ngModel" required minlength="10"></textarea>
+      @if (submitted && mensaje.errors?.['minlength']) {
+  <div class="text-danger mt-2">
+    El mensaje debe tener al menos 10 caracteres.
+  </div>
+}
+@if (submitted && mensaje.invalid && !mensaje.errors?.['minlength']) {
+  <div class="text-danger mt-2">
+    El mensaje es obligatorio.
+  </div>
+}
+
     </div>
 
     <!-- Opciones (Checkboxes) -->
@@ -108,7 +120,7 @@
     </div>
 
     <!-- Botón de Envío -->
-    <button [disabled]="!isValid()" type="submit">
+    <button  type="submit">
       {{ editando ? 'Actualizar Queja' : 'Enviar Queja' }}
     </button>
 
