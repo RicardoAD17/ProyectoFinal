@@ -52,16 +52,17 @@ export class NosotrosComponent {
 
 
   isValid(): boolean {
-    return (
-      this.queja.nombre.length >= 3 &&
-      this.validateEmail(this.queja.correo) &&
-      this.queja.motivo !== '' &&
-      this.queja.fecha !== '' &&
-      new Date(this.queja.fecha) <= this.getToday() &&
-      this.queja.opciones.length > 0 &&
-      this.queja.gravedad !== ''
-    );
-  }
+  return (
+    this.queja.nombre.length >= 3 &&
+    this.validateEmail(this.queja.correo) &&
+    this.queja.motivo.length >= 10 && // ← Aquí el cambio
+    this.queja.fecha !== '' &&
+    new Date(this.queja.fecha) >= this.getToday() &&
+    this.queja.opciones.length > 0 &&
+    this.queja.gravedad !== ''
+  );
+}
+
 
   getToday(): Date {
     const hoy = new Date();
