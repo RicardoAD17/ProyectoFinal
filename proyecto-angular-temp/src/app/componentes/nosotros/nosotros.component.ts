@@ -39,7 +39,7 @@ export class NosotrosComponent {
       this.validateEmail(this.queja.correo) &&
       this.queja.motivo !== '' &&
       this.queja.fecha !== '' &&
-      new Date(this.queja.fecha) >= this.getToday() &&
+      new Date(this.queja.fecha) <= this.getToday() &&
       this.queja.opciones.length > 0 &&
       this.queja.gravedad !== ''
     );

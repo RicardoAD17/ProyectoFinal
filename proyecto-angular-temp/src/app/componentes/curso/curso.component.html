@@ -1,1 +1,7 @@
-<p>curso works!</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+      <app-curso-card
+        *ngFor="let curso of cursos"
+        [curso]="curso"
+        (seleccionar)="manejarSeleccion($event)">
+      </app-curso-card>
+</div>
