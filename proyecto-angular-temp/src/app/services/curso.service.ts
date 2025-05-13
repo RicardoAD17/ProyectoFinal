@@ -22,7 +22,7 @@ export interface Curso {
   providedIn: 'root'
 })
 export class CursoService {
-  private apiUrl="https://cursosgymmylopez.free.beeceptor.com"
+  private apiUrl="https://cursogym.free.beeceptor.com"
 
   constructor( private http: HttpClient) {
     
