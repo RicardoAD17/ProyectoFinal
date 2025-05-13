@@ -66,6 +66,12 @@
             La fecha es obligatoria.
           </div>
         }
+        @if ((fecha.dirty || submitted) && !esFechaEnRangoValido()) {
+  <div class="text-danger mt-2">
+    La fecha no puede ser mayor a 10 días después de hoy.
+  </div>
+}
+
       </div>
 
       <!-- Mensaje -->

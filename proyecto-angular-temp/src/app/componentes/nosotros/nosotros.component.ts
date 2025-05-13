@@ -57,12 +57,24 @@ export class NosotrosComponent {
     this.validateEmail(this.queja.correo) &&
     this.queja.motivo.length >= 10 &&
     this.queja.fecha !== '' &&
-    new Date(this.queja.fecha) >= this.getToday() &&
+    this.esFechaEnRangoValido() &&
     this.queja.opciones.length > 0 &&
     this.queja.gravedad !== ''
   );
 }
 
+
+esFechaEnRangoValido(): boolean {
+  if (!this.queja.fecha) return false;
+
+  const fechaSeleccionada = new Date(this.queja.fecha);
+  const hoy = this.getToday();
+
+  const diezDiasDespues = new Date(hoy);
+  diezDiasDespues.setDate(hoy.getDate() + 10);
+
+  return fechaSeleccionada >= hoy && fechaSeleccionada <= diezDiasDespues;
+}
 
   getToday(): Date {
     const hoy = new Date();
