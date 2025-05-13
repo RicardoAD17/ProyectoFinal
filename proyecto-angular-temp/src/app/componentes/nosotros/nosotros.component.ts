@@ -53,9 +53,9 @@ export class NosotrosComponent {
 
   isValid(): boolean {
   return (
-    this.queja.nombre.length >= 3 &&
+    this.queja.nombre.length >= 10 &&
     this.validateEmail(this.queja.correo) &&
-    this.queja.motivo.length >= 10 && // ← Aquí el cambio
+    this.queja.motivo.length >= 10 &&
     this.queja.fecha !== '' &&
     new Date(this.queja.fecha) >= this.getToday() &&
     this.queja.opciones.length > 0 &&

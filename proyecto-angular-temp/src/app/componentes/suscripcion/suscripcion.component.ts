@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { PlanesComponent } from '../planes/planes.component';
 
@@ -16,6 +16,8 @@ export class SuscripcionComponent {
   planes = ['Básico', 'Intermedio', 'Avanzado'];
   objetivos = ['Perder peso', 'Ganar masa muscular', 'Mantener condición'];
   editando = false;
+  hovering = false;
+
 indiceEditando = -1;
 
   constructor(private fb: FormBuilder) {
@@ -26,7 +28,7 @@ indiceEditando = -1;
         '',
         [Validators.required, Validators.email],
       ],
-      fecha: ['', [Validators.required, this.fechaNoPasadaValidator]],
+      fecha: ['', [Validators.required, this.fechaNoPasadaValidator,this.fechaRangoValida]],
       plan: ['', Validators.required],
       objetivos: this.buildObjetivos(),
       genero: ['', Validators.required],
@@ -109,5 +111,25 @@ onSubmit() {
     this.indiceEditando = -1;
   }
 
+}
+
+
+fechaRangoValida(control: AbstractControl): ValidationErrors | null {
+  const fechaSeleccionada = new Date(control.value);
+  const hoy = new Date();
+  const maxFecha = new Date();
+  maxFecha.setDate(hoy.getDate() + 10);
+
+  if (isNaN(fechaSeleccionada.getTime())) return null; // si no es una fecha válida
+
+  if (fechaSeleccionada < hoy) {
+    return { fechaInvalida: true };
+  }
+
+  if (fechaSeleccionada > maxFecha) {
+    return { fechaFueraDeRango: true };
+  }
+
+  return null;
 }
 }
