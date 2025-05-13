@@ -31,8 +31,18 @@
           }
         </ul>
       }
+        <div>
+        <button mat-raised-button color="primary" (click)="goBack() " class="back-button">
+        Regresar a Cursos
+        </button>
+        </div>
     </div>
   } @else {
     <p class="loading-message">Cargando detalles del curso...</p>
+      <div>
+      <button mat-raised-button color="primary" (click)="goBack() " class="back-button">
+      Regresar a Cursos
+      </button>
+      </div>
   }
 </div>

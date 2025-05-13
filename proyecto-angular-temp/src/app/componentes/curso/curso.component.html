@@ -1,7 +1,9 @@
+<app-busqueda (searchChanged)="busqueda($event)"></app-busqueda>
+
 <div class="cursos-container">
-  @if (cursos.length > 0) {
+  @if (cursosFiltrados.length > 0) {
     <div class="grid-container">
-      @for (curso of cursos; track curso.id) {
+      @for (curso of cursosFiltrados; track curso.id) {
         <div class="curso-card">
           <a [routerLink]="['/curso', curso.id]" class="curso-link">
             <img [src]="curso.imagen" alt="{{ curso.nombre }}" class="curso-image" />
@@ -11,6 +13,6 @@
       }
     </div>
   } @else {
-    <p class="loading-message">No hay cursos disponibles.</p>
+    <p class="loading-message">No se encontraron cursos con ese nombre.</p>
   }
 </div>
