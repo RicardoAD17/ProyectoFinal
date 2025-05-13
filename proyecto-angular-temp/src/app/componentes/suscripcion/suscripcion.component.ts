@@ -18,7 +18,7 @@ export class SuscripcionComponent {
   objetivos = ['Perder peso', 'Ganar masa muscular', 'Mantener condición'];
   editando = false;
   hovering = false;
-  video:string="I_RYujJvZ7s";
+  video:string="I_RYujJvZ7s"; // videoo
 
 indiceEditando = -1;
 
