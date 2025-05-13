@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Curso, CursoService } from '../../services/curso.service';
-import { ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-curso-detalle',
   standalone: true,
-  imports: [],
+  imports: [MatFormFieldModule, MatInputModule],
   templateUrl: './curso-detalle.component.html',
   styleUrl: './curso-detalle.component.css'
 })
@@ -14,7 +16,8 @@ export class CursoDetalleComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private cursoService: CursoService
+    private cursoService: CursoService,
+    private location:Location
   ) {}
 
     ngOnInit(): void {
@@ -28,5 +31,8 @@ export class CursoDetalleComponent implements OnInit {
         });
       }
     }
+    goBack(): void {
+  this.location.back();
+}
 }
 
