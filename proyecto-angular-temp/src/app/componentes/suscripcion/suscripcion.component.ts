@@ -4,10 +4,11 @@ import Swal from 'sweetalert2';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { PlanesComponent } from '../planes/planes.component';
+import { DomseguroPipe } from '../domseguro.pipe';
 
 @Component({
   selector: 'app-suscripcion',
-  imports: [CommonModule,ReactiveFormsModule,PlanesComponent],
+  imports: [CommonModule,ReactiveFormsModule,PlanesComponent,DomseguroPipe],
   templateUrl: './suscripcion.component.html',
   styleUrl: './suscripcion.component.css'
 })
@@ -17,6 +18,7 @@ export class SuscripcionComponent {
   objetivos = ['Perder peso', 'Ganar masa muscular', 'Mantener condición'];
   editando = false;
   hovering = false;
+  video:string="I_RYujJvZ7s";
 
 indiceEditando = -1;
 
@@ -132,4 +134,12 @@ fechaRangoValida(control: AbstractControl): ValidationErrors | null {
 
   return null;
 }
+
+
+videoEstilos = {
+  backgroundColor: '#f4faff',
+  padding: '10px',
+  borderRadius: '15px'
+};
+
 }

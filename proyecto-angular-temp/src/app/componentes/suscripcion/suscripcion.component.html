@@ -2,6 +2,7 @@
   <div class="planes">
     <app-planes></app-planes>
   </div>
+  <div class="contenedor">
   <div class="formulario">
     <form [formGroup]="suscripcionForm" (ngSubmit)="onSubmit()" class="form-container">
       
@@ -19,7 +20,6 @@
           </div>
         }
       </div>
-
       <div class="form-group">
         <label for="correo">Correo electrónico:</label>
         <input id="correo" type="email" formControlName="correo" />
@@ -106,4 +106,23 @@
       </button>
     </form>
   </div>
+<br><br><br>
+
+<div 
+    class="video-container" 
+    [ngClass]="{ 'resaltado': true }" 
+    [ngStyle]="videoEstilos"
+  >
+    <iframe 
+      width="560" 
+      height="315" 
+      [src]="video | domseguro:'https://www.youtube.com/embed/'" 
+      frameborder="0" 
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+      allowfullscreen>
+    </iframe>
+  </div>
+
+</div>
+<br><br><br>
 </div>

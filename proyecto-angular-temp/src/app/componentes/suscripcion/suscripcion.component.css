@@ -91,3 +91,21 @@ button[type="submit"]:disabled {
   font-size: 14px;
   margin-top: 5px;
 }
+
+.video-container {
+  display: flex;
+  justify-content: center;  /* Centra el iframe horizontalmente */
+  padding: 20px;
+  border-radius: 15px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 1200px;  /* Tamaño máximo opcional */
+  margin: 0 auto;    /* Centra el contenedor en la página */
+}
+
+.video-container iframe {
+  border-radius: 10px;
+  width: 100%;
+  height: 630px;
+}
