@@ -19,6 +19,7 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "angular-cli-ghpages": "^2.0.3",
     "aos": "^2.3.4",
     "bootstrap": "^5.3.5",
     "leaflet": "^1.9.4",
