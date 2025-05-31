@@ -29,21 +29,22 @@ export class TablasComponent {
     }
 
   eliminarSuscripcion(index: number) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'Esta acción eliminará la suscripción.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then(result => {
-      if (result.isConfirmed) {
-        this.suscripciones.splice(index, 1);
-        localStorage.removeItem('suscripcion');
-        Swal.fire('Eliminado', 'La suscripción ha sido eliminada.', 'success');
-      }
-    });
-  }
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción eliminará la suscripción.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then(result => {
+    if (result.isConfirmed) {
+      this.suscripciones.splice(index, 1);
+      localStorage.setItem('suscripciones', JSON.stringify(this.suscripciones)); // ✅ actualizar localStorage
+      Swal.fire('Eliminado', 'La suscripción ha sido eliminada.', 'success');
+    }
+  });
+}
+
 
 eliminarQueja(index: number) {
   Swal.fire({
