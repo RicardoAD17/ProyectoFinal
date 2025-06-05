@@ -9,6 +9,7 @@ import * as L from 'leaflet';
 })
 export class UbicacionComponent implements AfterViewInit{
   private map: L.Map | undefined;
+  
   ngAfterViewInit(): void {
     this.initMap();
   }
@@ -17,8 +18,13 @@ export class UbicacionComponent implements AfterViewInit{
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(this.map);
-
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'assets/marker-icon-2x.png',
+      iconUrl: 'assets/marker-icon.png',
+      shadowUrl: 'assets/marker-shadow.png',
+    });
    L.marker([21.81294374043674, -102.28633600744277]).addTo(this.map)
-  .openPopup();
+    .openPopup();
   }
 }
