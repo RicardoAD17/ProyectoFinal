@@ -1,8 +1,6 @@
 {
-  "name": "proyecto-angular-temp",
-  "short_name": "proyecto-angular-temp",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "Gymmy Lopez",
+  "short_name": "Gymmy",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
