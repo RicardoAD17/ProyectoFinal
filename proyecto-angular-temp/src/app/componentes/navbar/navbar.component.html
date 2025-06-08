@@ -85,6 +85,14 @@
             <label for="adminPassword" class="form-label">Contraseña</label>
             <input type="password" class="form-control" id="adminPassword" placeholder="********" [(ngModel)]="admin.password" name="password">
           </div>
+          <div class="mb-3">
+            <re-captcha
+              #recaptchaRef
+              [siteKey]="'6Ld0MlkrAAAAABQ7cVrlEawBqrND6Hsy2wDU5GCv'"
+              (resolved)="onCaptchaResolved($event)">
+            </re-captcha>
+          </div>
+
         </form>
         @if (loginError) {
           <div class="alert alert-danger mt-2">
