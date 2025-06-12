@@ -5,10 +5,11 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule
 import { RouterOutlet } from '@angular/router';
 import { PlanesComponent } from '../planes/planes.component';
 import { DomseguroPipe } from '../domseguro.pipe';
+import { PaypalButtonComponent } from '../paypal-button/paypal-button.component';
 
 @Component({
   selector: 'app-suscripcion',
-  imports: [CommonModule,ReactiveFormsModule,PlanesComponent,DomseguroPipe],
+  imports: [CommonModule,ReactiveFormsModule,PlanesComponent,DomseguroPipe,PaypalButtonComponent],
   templateUrl: './suscripcion.component.html',
   styleUrl: './suscripcion.component.css'
 })
