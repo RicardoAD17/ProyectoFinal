@@ -15,7 +15,7 @@ export class PaypalButtonComponent implements AfterViewInit{
         return actions.order.create({
           purchase_units: [{
             amount: {
-              value: '10.00' // Monto de la transacción
+              value: '100.00' // Monto de la transacción
             }
           }]
         });
