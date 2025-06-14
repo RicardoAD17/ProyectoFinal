@@ -10,7 +10,7 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { initializeApp } from "firebase/app";
 import { environment } from './environments/environments';
 
-const app = initializeApp(environment.firebaseConfig);
+const app = initializeApp(environment.firebase);
 
 if (environment.production) {
   enableProdMode();
