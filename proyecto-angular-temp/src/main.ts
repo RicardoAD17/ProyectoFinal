@@ -4,8 +4,17 @@ import { AppComponent } from './app/app.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
-import { isDevMode } from '@angular/core';
+import { enableProdMode, isDevMode } from '@angular/core';
 import { provideServiceWorker } from '@angular/service-worker';
+
+import { initializeApp } from "firebase/app";
+import { environment } from './environments/environments';
+
+const app = initializeApp(environment.firebaseConfig);
+
+if (environment.production) {
+  enableProdMode();
+}
 
 bootstrapApplication(AppComponent,  {
   providers: [
