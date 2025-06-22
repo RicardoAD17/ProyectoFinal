@@ -24,18 +24,42 @@ export class EquipoService {
       semestre: '6° C'
     },
     {
-      nombre: 'Diego Saldaña Centeno',
-      id: '262737',
+      nombre: 'Jaime López Martínez',
+      id: '347301',
       edad: 20,
-      foto: 'assets/deigo.png',
+      foto: 'assets/jaime.jpg',
       carrera: 'Ing. en Sistemas Computacionales',
       semestre: '6° C'
     },
     {
-      nombre: 'Jaime López Martíenz',
-      id: '347301',
+      nombre: 'Ilse Jacqueline Martínez Espinosa',
+      id: '349964',
+      edad: 21,
+      foto: 'assets/Ilse.jpg',
+      carrera: 'Ing. en Sistemas Computacionales',
+      semestre: '6° C'
+    },
+    {
+      nombre: 'Nadia Ramírez Solis',
+      id: '348271',
+      edad: 21,
+      foto: 'assets/Nadia.jpg',
+      carrera: 'Ing. en Sistemas Computacionales',
+      semestre: '6° C'
+    },
+    {
+      nombre: 'Uriel Rodríguez Guadarrama',
+      id: '349397',
+      edad: 21,
+      foto: 'assets/Guada.jpg',
+      carrera: 'Ing. en Sistemas Computacionales',
+      semestre: '6° C'
+    },
+    {
+      nombre: 'Valeria Michelle Saucedo Díaz',
+      id: '352288',
       edad: 20,
-      foto: 'assets/jaime.jpg',
+      foto: 'assets/Ilse.jpg',
       carrera: 'Ing. en Sistemas Computacionales',
       semestre: '6° C'
     }
