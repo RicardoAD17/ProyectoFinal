@@ -7,24 +7,25 @@ import { routes } from './app/app.routes';
 import { enableProdMode, isDevMode } from '@angular/core';
 import { provideServiceWorker } from '@angular/service-worker';
 
-import { initializeApp } from "firebase/app";
-import { environment } from './environments/environments';
 
-const app = initializeApp(environment.firebase);
+import { environment } from './environments/environments';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 
 if (environment.production) {
   enableProdMode();
 }
 
-bootstrapApplication(AppComponent,  {
+bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient(), 
-    provideRouter(routes), provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          }), provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          })
-  ]
+    provideHttpClient(),
+    provideRouter(routes),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
+  ],
 })
+.catch(err => console.error(err));
