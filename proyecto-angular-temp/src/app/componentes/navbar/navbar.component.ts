@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { RecaptchaModule } from 'ng-recaptcha';
 import { ViewChild } from '@angular/core';
 import { RecaptchaComponent } from 'ng-recaptcha';
@@ -12,9 +12,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { GymBdService } from '../../services/gym-bd.service';
 
-import { Router } from '@angular/router';
+import { Firestore} from '@angular/fire/firestore'; 
+import { signInWithEmailAndPassword, Auth } from '@angular/fire/auth';
 import { LoadingService } from '../../services/loading.service';
 import { HttpClient } from '@angular/common/http';
+
 
 declare var bootstrap: any;
 
@@ -39,7 +41,6 @@ export function passwordValidator(control: AbstractControl): ValidationErrors | 
   imports: [MatButtonModule,MatMenuModule,RouterModule,CommonModule,ReactiveFormsModule,RecaptchaModule,
     MatFormFieldModule,
     MatInputModule,
-    MatInputModule,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
@@ -53,6 +54,13 @@ export class NavbarComponent {
     password: new FormControl('', [Validators.required,Validators.minLength(8),Validators.maxLength(20),passwordValidator]),
     repeat_password: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(20),passwordValidator]),
   });
+
+  public adminForm: FormGroup = new FormGroup({
+    nombre: new FormControl('', [Validators.required,Validators.minLength(10),Validators.maxLength(40)]),
+    correo: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(20),passwordValidator])
+  });
+
   
   admin = { username: '', password: '' };
   currentAdmin: { username: string, nombre: string } | null = null;
@@ -64,12 +72,15 @@ export class NavbarComponent {
     { username: 'entrenador', password: 'fit789', nombre: 'Diego Saldaña' }
   ];
 
-  constructor(private gymBdService: GymBdService, private router:Router,private loadingService: LoadingService, private http: HttpClient){
+
+  constructor(private gymBdService: GymBdService,private auth: Auth, private firestore: Firestore,private router: Router,
+              private loadingService: LoadingService, private http: HttpClient){
     this.form.get('repeat_password')?.setValidators([
       Validators.required,
       Validators.minLength(8),
       this.passwordValidator()
     ]);
+
   }
 
   public passwordValidator(): ValidatorFn {
@@ -91,44 +102,73 @@ export class NavbarComponent {
   this.captchaToken = token;
   }
 
-
-  login() {
+  async login() {
     if (!this.captchaToken) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Captcha requerido',
-        text: 'Por favor, verifica que no eres un robot.'
-      });
+      Swal.fire('Captcha requerido', 'Por favor, verifica que no eres un robot.', 'warning');
       return;
     }
 
-    const found = this.validAdmins.find(
-      user => user.username === this.admin.username && user.password === this.admin.password
-    );
+    const email = this.form.get('email')?.value;
+    const password = this.form.get('password')?.value;
 
+    try {
+      const cred = await signInWithEmailAndPassword(this.auth, email, password);
+      const uid = cred.user.uid;
 
-  if (found) {
-    this.currentAdmin = { username: found.username, nombre: found.nombre };
-    this.loginError = false;
-    localStorage.setItem('logueado', 'true');
-    Swal.fire({
-      icon: 'success',
-      title: '¡Inicio de sesión exitoso!',
-      text: `Bienvenido, ${found.nombre}`
-    }).then(() => {
-      const modalElement = document.getElementById('adminLoginModal');
+      // Buscar
+      const adminData = await this.gymBdService.obtenerAdministradorPorUID(uid);
+      if (adminData) {
+        this.currentAdmin = {
+          username: email,
+          nombre: adminData['nombre']
+        };
+
+        localStorage.setItem('usuarioActual', JSON.stringify({
+          tipo: 'admin',
+          nombre: adminData['nombre'],
+          uid
+        }));
+
+        Swal.fire('Administrador', `Bienvenido administrador ${adminData['nombre']}`, 'success');
+        this.router.navigate(['/tablas']);
+      } else {
+        const userData = await this.gymBdService.obtenerUsuarioPorUID(uid);
+
+        if (userData) {
+          this.currentAdmin = {
+            username: email,
+            nombre: userData['nombre']
+          };
+
+          localStorage.setItem('usuarioActual', JSON.stringify({
+            tipo: 'usuario',
+            nombre: userData['nombre'],
+            uid
+          }));
+
+          Swal.fire('Bienvenido', `Hola ${userData['nombre']}`, 'success');
+        } else {
+          this.currentAdmin = null;
+          Swal.fire('Usuario no encontrado', 'No estás registrado como usuario ni administrador.', 'warning');
+          return;
+        }
+      }
+
+      // Cierra el modal
+      const modalElement = document.getElementById('LogInModal');
       if (modalElement) {
         const modalInstance = bootstrap.Modal.getInstance(modalElement);
         modalInstance?.hide();
       }
-    });
-  } else {
-    this.loginError = true;
+
+    } catch (err: any) {
+      Swal.fire('Error de inicio de sesión', err.message, 'error');
+    } finally {
+      this.recaptchaComponent?.reset();
+      this.captchaToken = null;
+    }
   }
 
-    // Limpia el captcha después de cada intento
-    this.captchaToken = null;
-  }
 
   enviarFormulario() {
     if (this.form.valid) {
@@ -152,9 +192,35 @@ export class NavbarComponent {
     }
   }
 
+
+  registrarAdministrador() {
+    if (this.adminForm.valid) {
+      const { nombre, correo, password } = this.adminForm.value;
+
+      this.gymBdService.registrarAdministrador({ nombre, correo, password })
+        .then(() => {
+          Swal.fire('Éxito', 'Administrador registrado correctamente', 'success');
+          this.adminForm.reset();
+
+          const modal = document.getElementById('adminSignupModal');
+          if (modal) {
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            modalInstance?.hide();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          Swal.fire('Error', 'No se pudo registrar: ' + err.message, 'error');
+        });
+    } else {
+      this.adminForm.markAllAsTouched();
+    }
+  }
+
+
   logout() {
     this.currentAdmin = null;
-    this.recaptchaComponent?.reset(); // 💡 Reinicia el captcha visual y lógicamente
+    this.recaptchaComponent?.reset(); //  Reinicia el captcha visual y lógicamente
     this.captchaToken = null;
     localStorage.setItem('logueado', 'false');
     Swal.fire({

@@ -33,8 +33,17 @@
           </li>
         } @else {
           <li class="nav-item">
-            <a class="nav-link text-primary fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#adminLoginModal">Sign Up</a>
+
+            <a class="nav-link text-primary fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#SignUpModal">Sign Up</a>
+
           </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#LogInModal">Log In</a>
+          </li>
+          <!--
+          <li class="nav-item">
+            <a class="nav-link text-primary fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#adminSignupModal">Sign Up Ad</a>
+          </li>-->
         }
       </ul>
       
@@ -67,8 +76,8 @@
   </div>
 </nav>
 
-<!-- Modal de login -->
-<div class="modal fade" id="adminLoginModal" tabindex="-1" aria-labelledby="adminLoginModalLabel" aria-hidden="true">
+<!-- Modal de signup -->
+<div class="modal fade" id="SignUpModal" tabindex="-1" aria-labelledby="SignUpModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -76,7 +85,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
-        <!--AQUI-->
         <form [formGroup]="form" (ngSubmit)="enviarFormulario()">
           <!--Nombre-->
           <mat-form-field appearance="fill">
@@ -178,9 +186,109 @@
             </re-captcha>
           </div>
 
-          <button mat-raised-button color="primary" (click)="navigateWithLoading('')" type="submit" [disabled]="form.invalid">Ingresar</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Sign Up</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Modal de LogIn -->
+<div class="modal fade" id="LogInModal" tabindex="-1" aria-labelledby="LoginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="adminLoginModalLabel">Log In</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <!--AQUI-->
+        <form [formGroup]="form" (ngSubmit)="login()">
+          <!--Email-->
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput id="email" type="email" formControlName="email" />
+
+            @if (form.get('email')?.touched && form.get('email')?.invalid) {
+              <div>
+                @if (form.get('email')?.errors?.['required']) {
+                  <mat-error>El email es requerido.</mat-error>
+                }
+                @if (form.get('email')?.errors?.['email']) {
+                  <mat-error>El email no es válido.</mat-error>
+                }
+              </div>
+            }
+          </mat-form-field>
+          <!--Contraseña-->
+          <mat-form-field appearance="fill">
+            <mat-label>Contraseña</mat-label>
+            <input matInput id="password" type="password" formControlName="password" />
+            @if (form.get('password')?.touched && form.get('password')?.invalid) {
+              <div>
+                @if (form.get('password')?.errors?.['required']) {
+                  <mat-error>La contraseña es requerida.</mat-error>
+                }
+                @if (form.get('password')?.errors?.['minlength']) {
+                  <mat-error>Debes tener al menos 8 caracteres.</mat-error>
+                }
+                @if (form.get('password')?.errors?.['maxlength']) {
+                  <mat-error>La contraseña pasa el máximo de caracteres.</mat-error>
+                }
+                @if (form.get('password')?.errors?.['invalidPassword']) {
+                  <mat-error>
+                    La contraseña debe contener solo letras, números o _ (guion bajo), al menos una mayúscula y un número.
+                  </mat-error>
+                }
+              </div>
+            }
+          </mat-form-field>
+  
+
+          <div class="mb-3">
+            <re-captcha
+              #recaptchaRef
+              [siteKey]="'6Ld0MlkrAAAAABQ7cVrlEawBqrND6Hsy2wDU5GCv'"
+              (resolved)="onCaptchaResolved($event)">
+            </re-captcha>
+          </div>
+
+          <button mat-raised-button color="primary" (click)="navigateWithLoading('')" type="submit" [disabled]="form.invalid">Log In</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de registro de administrador 
+<div class="modal fade" id="adminSignupModal" tabindex="-1" aria-labelledby="adminSignupModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form [formGroup]="adminForm" (ngSubmit)="registrarAdministrador()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="adminSignupModalLabel">Registrar Administrador</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <mat-form-field appearance="fill">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="correo" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Contraseña</mat-label>
+            <input matInput type="password" formControlName="password" />
+          </mat-form-field>
+        </div>
+        <div class="modal-footer">
+          <button mat-raised-button color="primary" type="submit">Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+-->
