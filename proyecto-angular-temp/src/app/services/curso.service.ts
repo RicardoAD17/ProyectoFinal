@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, delay, finalize, map } from 'rxjs/operators';
 import { apiError } from '../signals/error.signal';
+import { startLoading, stopLoading } from '../signals/loading.signal';
 export interface Curso {
   id: number;
   nombre: string;
@@ -37,8 +38,11 @@ export class CursoService {
   }
 
   obtenerCursoPorId(id: string): Observable<Curso> {
+    startLoading(); //Inicia la carga (signal)
     return this.http.get<Curso[]>(this.apiUrl).pipe(
       map((cursos: Curso[]) => cursos.find((c: Curso) => c.id === Number(id)) as Curso),
+      delay(1000), //Simula un retraso de 2 segundos (Para que se pueda percibir la loadingSignal)
+      finalize(() => stopLoading()), //Finaliza la carga (signal)
       catchError((error) => {
         apiError.set('Error al cargar el curso solicitado');
         return throwError(() => error);

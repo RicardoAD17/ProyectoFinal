@@ -6,8 +6,7 @@ import { HeaderComponent } from './componentes/header/header.component';
 import * as AOS from 'aos';
 import { apiError, limpiarError } from './signals/error.signal';
 import Swal from 'sweetalert2';
-
-
+import { isLoading } from './signals/loading.signal';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class AppComponent {
   title = 'proyecto-angular-temp';
+  isLoading = isLoading;
   apiError = apiError;
 
   constructor() {
