@@ -12,6 +12,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { GymBdService } from '../../services/gym-bd.service';
 
+import { Router } from '@angular/router';
+import { LoadingService } from '../../services/loading.service';
+import { HttpClient } from '@angular/common/http';
+
 declare var bootstrap: any;
 
 export function passwordValidator(control: AbstractControl): ValidationErrors | null {
@@ -60,7 +64,7 @@ export class NavbarComponent {
     { username: 'entrenador', password: 'fit789', nombre: 'Diego Saldaña' }
   ];
 
-  constructor(private gymBdService: GymBdService){
+  constructor(private gymBdService: GymBdService, private router:Router,private loadingService: LoadingService, private http: HttpClient){
     this.form.get('repeat_password')?.setValidators([
       Validators.required,
       Validators.minLength(8),
@@ -159,4 +163,23 @@ export class NavbarComponent {
       text: 'Has cerrado la sesión exitosamente.'
     });
   }
+
+
+    //Parte del loading -------------------------------------------------------------------------------------
+  navigateWithLoading(path: string) {
+    this.loadingService.show();
+
+    this.http.get('https://jsonplaceholder.typicode.com/posts/1').subscribe({
+      next: () => {
+        this.loadingService.hide();
+        this.router.navigate([path]);
+      },
+      error: () => {
+        this.loadingService.hide();
+        this.router.navigate([path]);
+      }
+    });
+  }
+//fin parte del loading -----------------------------------------------------------------------------------
+
 }
