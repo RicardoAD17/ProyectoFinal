@@ -1,8 +1,8 @@
 .container-flex {
     background-color:#fafafa ;
     display: flex;
-    gap: 2rem; /* Espacio entre galería e info */
-    align-items: center; /* Centra verticalmente los hijos */
+    gap: 2rem;
+    align-items: center; 
   }
 .galeria{
     flex: 3;
@@ -42,7 +42,7 @@ button:hover{
     font-family: Arial, Helvetica, sans-serif;
     font-size: 25px;
     height: 300px;
-    max-width: 600px; /* Ajusta según prefieras */
+    max-width: 600px; 
   }
 .main-image {
     padding: auto;
@@ -68,3 +68,70 @@ button:hover{
     border: 2px solid #007bff;
   }
   
+  @media (max-width: 992px) {
+  .container-flex {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .galeria,
+  .info {
+    width: 100%;
+    flex: unset;
+  }
+  .info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .info .card {
+    height: auto; 
+    font-size: 20px;
+    padding: 1rem;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .main-image {
+    max-width: 100%;
+    height: auto;
+  }
+
+  h1 {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .thumb-image {
+    width: 80px;
+    height: 60px;
+  }
+
+  .d-grid.gap-2.col-6.mx-auto {
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  .info .card {
+    font-size: 18px;
+  }
+
+  .thumb-image {
+    width: 70px;
+    height: 50px;
+  }
+}

@@ -3,6 +3,7 @@ import { OfertadepComponent } from '../ofertadep/ofertadep.component';
 import { GaleriaComponent } from '../galeria/galeria.component';
 import { UbicacionComponent } from '../ubicacion/ubicacion.component';
 import { Component } from '@angular/core';
+import { QrComponent } from '../qr/qr.component';
 
 @Component({
   selector: 'app-home',
