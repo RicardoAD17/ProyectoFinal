@@ -20,6 +20,9 @@ export class SuscripcionComponent {
   editando = false;
   hovering = false;
   video:string="I_RYujJvZ7s"; // videoo
+    get isLoggedIn(): boolean {
+    return localStorage.getItem('logueado') === 'true';
+  }
 
 indiceEditando = -1;
 
@@ -37,7 +40,19 @@ indiceEditando = -1;
       genero: ['', Validators.required],
     });
   }
+   verificarEnvio(event: Event): void {
+      if (!this.isLoggedIn) {
+        event.preventDefault(); // Detiene el envío
+        Swal.fire({
+          icon: 'warning',
+          title: 'Acceso denegado',
+          text: 'Debes iniciar sesión para enviar el formulario.'
+        });
+        return;
+      }
 
+      this.onSubmit();
+    }
 ngOnInit() {
   const registro = localStorage.getItem('registroEditando');
   if (registro) {

@@ -54,7 +54,7 @@ export class NavbarComponent {
   if (found) {
     this.currentAdmin = { username: found.username, nombre: found.nombre };
     this.loginError = false;
-
+    localStorage.setItem('logueado', 'true');
     Swal.fire({
       icon: 'success',
       title: '¡Inicio de sesión exitoso!',
@@ -79,6 +79,7 @@ export class NavbarComponent {
     this.currentAdmin = null;
     this.recaptchaComponent?.reset(); // 💡 Reinicia el captcha visual y lógicamente
     this.captchaToken = null;
+    localStorage.setItem('logueado', 'false');
     Swal.fire({
       icon: 'info',
       title: 'Sesión cerrada',
