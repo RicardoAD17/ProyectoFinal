@@ -4,6 +4,7 @@ import { Suscripcion } from '../interfacesBD/Formularios.interface';
 import { Queja } from '../componentes/queja.interface';
 import { Usuarios} from '../interfacesBD/Usuarios.interface';
 import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { doc, getDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,11 @@ export class GymBdService {
   agregarAdministrador(admin: any) {
     const adminRef = collection(this.firestore, 'administradores');
     return addDoc(adminRef, admin);
+  }
+
+  // Formulario suscripcion con Firestore
+  recuperaSuscripcionPorId(id: string) {
+  const ref = doc(this.firestore, 'formularioSuscripcion', id);
+  return getDoc(ref);
   }
 }

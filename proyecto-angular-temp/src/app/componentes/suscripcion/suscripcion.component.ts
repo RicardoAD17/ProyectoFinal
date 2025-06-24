@@ -58,32 +58,44 @@ indiceEditando = -1;
 
       this.onSubmit();
     }
-ngOnInit() {
+
+    // ngOnInit con Firestore para editar suscripción 
+async ngOnInit() {
   const registro = localStorage.getItem('registroEditando');
   if (registro) {
-    const { tipo, index } = JSON.parse(registro);
-    if (tipo === 'suscripcion') {
-      const suscripciones = JSON.parse(localStorage.getItem('suscripciones') || '[]');
-      const datos = suscripciones[index];
-      if (datos) {
-        this.editando = true;
-        this.indiceEditando = index;
-        this.suscripcionForm.patchValue({
-          nombre: datos.nombre,
-          correo: datos.correo,
-          fecha: datos.fecha,
-          plan: datos.plan,
-          genero: datos.genero
-        });
+    const { tipo, id } = JSON.parse(registro);
+    if (tipo === 'suscripcion' && id) {
+      try {
+        const docSnap = await this.gymBdService.recuperaSuscripcionPorId(id);
+        if (docSnap.exists()) {
+          const datos = docSnap.data() as Suscripcion;
+          this.editando = true;
 
-          // Setear checkboxes de objetivos:
-          datos.objetivos.forEach((valor: boolean, i: number) => {
-            (this.objetivosFormArray.at(i) as any).setValue(valor);
+          this.suscripcionForm.patchValue({
+            nombre: datos.nombre,
+            correo: datos.correo,
+            fecha: datos.fecha,
+            plan: datos.plan,
+            genero: datos.genero
           });
+
+          datos.objetivos.forEach((obj: string) => {
+            const index = this.objetivos.indexOf(obj);
+            if (index !== -1) {
+              (this.objetivosFormArray.at(index) as any).setValue(true);
+            }
+          });
+
+        } else {
+          console.warn('La suscripción no existe.');
         }
+      } catch (error) {
+        console.error('Error al obtener suscripción:', error);
       }
     }
   }
+}
+
 
   
 
