@@ -35,6 +35,7 @@ export class GymBdService {
       nombre: usuario.nombre,
       correo: usuario.correo
     });
+
   }
 
   async registrarAdministrador(admin: { nombre: string, correo: string, password: string }) {

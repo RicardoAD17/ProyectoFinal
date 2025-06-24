@@ -17,7 +17,7 @@
       <tbody>
         @for (suscripcion of suscripciones; let i = $index; track suscripcion) {
           <tr>
-            <td>{{ suscripcion.nombre }}</td>
+            <td>{{ suscripcion.nombre | uppercase }}</td>
             <td>{{ suscripcion.correo }}</td>
             <td>{{ suscripcion.fecha }}</td>
             <td>{{ suscripcion.plan }}</td>
@@ -63,7 +63,7 @@
       <tbody>
         @for (queja of quejas; let i = $index; track queja) {
           <tr>
-            <td>{{ queja.nombre }}</td>
+            <td>{{ queja.nombre | uppercase }}</td>
             <td>{{ queja.correo }}</td>
             <td>{{ queja.motivo }}</td>
             <td>{{ queja.fecha }}</td>

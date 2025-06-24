@@ -101,6 +101,7 @@
       <button type="submit"
               [disabled]="suscripcionForm.invalid"
               (mouseenter)="hovering = true"
+              (click)="verificarEnvio($event); openExternalLinkWithLoading('')"
             >
         {{ editando ? 'Actualizar suscripción' : 'Suscribirse' }}
       </button>

@@ -10,16 +10,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+          <a class="nav-link" routerLink="/inicio" (click)="navigateWithLoading('/inicio')" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-3 py-2 rounded-pill" routerLink="/curso" routerLinkActive="active">Cursos</a>
+          <a class="nav-link px-3 py-2 rounded-pill" routerLink="/curso" (click)="navigateWithLoading('/curso')" routerLinkActive="active">Cursos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-3 py-2 rounded-pill" routerLink="/nosotros" routerLinkActive="active">Nosotros</a>
+          <a class="nav-link px-3 py-2 rounded-pill" routerLink="/nosotros" (click)="navigateWithLoading('/nosotros')" routerLinkActive="active">Nosotros</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-3 py-2 rounded-pill" routerLink="/suscripcion" routerLinkActive="active">Suscripción</a>
+          <a class="nav-link px-3 py-2 rounded-pill" routerLink="/suscripcion" (click)="navigateWithLoading('/suscripcion')" routerLinkActive="active">Suscripción</a>
         </li>
       </ul>
 
@@ -33,7 +33,9 @@
           </li>
         } @else {
           <li class="nav-item">
+
             <a class="nav-link text-primary fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#SignUpModal">Sign Up</a>
+
           </li>
           <li class="nav-item">
             <a class="nav-link text-primary fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#LogInModal">Log In</a>
@@ -46,7 +48,7 @@
       </ul>
       
       @if (currentAdmin) {
-        <a class="nav-link d-flex align-items-center" routerLink="/tablas" title="Ir a Tablas" routerLinkActive="active">
+        <a class="nav-link d-flex align-items-center" routerLink="/tablas" (click)="navigateWithLoading('/tablas')" title="Ir a Tablas" routerLinkActive="active">
           <svg xmlns="http://www.w3.org/2000/svg"
                width="24" height="24" viewBox="0 0 24 24"
                fill="none" stroke="currentColor" stroke-width="2"
@@ -242,6 +244,7 @@
             }
           </mat-form-field>
   
+
           <div class="mb-3">
             <re-captcha
               #recaptchaRef
@@ -250,7 +253,8 @@
             </re-captcha>
           </div>
 
-          <button mat-raised-button color="primary" type="submit" >Log In</button>
+          <button mat-raised-button color="primary" (click)="navigateWithLoading('')" type="submit" [disabled]="form.invalid">Log In</button>
+
         </form>
       </div>
     </div>
