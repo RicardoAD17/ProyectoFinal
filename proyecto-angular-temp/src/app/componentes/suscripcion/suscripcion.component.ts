@@ -128,7 +128,6 @@ ngOnInit() {
       };
 
       try {
-        // Confirmación opcional (si quieres que confirme antes de guardar):
         const confirmacion = await Swal.fire({
           title: '¿Confirmar suscripción?',
           html: `
