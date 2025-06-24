@@ -8,6 +8,9 @@ import { PaypalButtonComponent } from '../paypal-button/paypal-button.component'
 import { Suscripcion } from '../../interfacesBD/Formularios.interface';
 import { GymBdService } from '../../services/gym-bd.service';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { LoadingService } from '../../services/loading.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-suscripcion',
@@ -28,7 +31,7 @@ export class SuscripcionComponent {
 
 indiceEditando = -1;
 
-  constructor(private fb: FormBuilder,private gymBdService: GymBdService) {
+  constructor(private fb: FormBuilder,private gymBdService: GymBdService, private router:Router,private loadingService: LoadingService, private http: HttpClient) {
     const fechaMinima = new Date();
     this.suscripcionForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
@@ -202,5 +205,37 @@ videoEstilos = {
   padding: '10px',
   borderRadius: '15px'
 };
+
+//Parte del loading -------------------------------------------------------------------------------------
+  navigateWithLoading(path: string) {
+    this.loadingService.show();
+
+    this.http.get('https://jsonplaceholder.typicode.com/posts/1').subscribe({
+      next: () => {
+        this.loadingService.hide();
+        this.router.navigate([path]);
+      },
+      error: () => {
+        this.loadingService.hide();
+        this.router.navigate([path]);
+      }
+    });
+  }
+
+  openExternalLinkWithLoading(url: string) {
+    this.loadingService.show();
+
+    // Se hace una petición real a un endpoint
+    this.http.get('https://jsonplaceholder.typicode.com/posts/1').subscribe({
+      next: () => {
+        this.loadingService.hide();
+      },
+      error: () => {
+        this.loadingService.hide();
+      }
+    });
+  }
+//fin parte del loading -----------------------------------------------------------------------------------
+
 
 }
