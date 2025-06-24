@@ -4,12 +4,13 @@ import { FooterComponent } from './componentes/footer/footer.component';
 import { NavbarComponent } from './componentes/navbar/navbar.component';
 import { HeaderComponent } from './componentes/header/header.component';
 import * as AOS from 'aos';
+import { LoadingComponent } from './componentes/loading/loading.component';
 
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FooterComponent,NavbarComponent,HeaderComponent],
+  imports: [RouterOutlet, FooterComponent,NavbarComponent,HeaderComponent,LoadingComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
