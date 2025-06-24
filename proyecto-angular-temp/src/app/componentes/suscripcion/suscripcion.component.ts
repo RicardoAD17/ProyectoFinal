@@ -22,6 +22,9 @@ export class SuscripcionComponent {
   editando = false;
   hovering = false;
   video:string="I_RYujJvZ7s"; // videoo
+    get isLoggedIn(): boolean {
+    return localStorage.getItem('logueado') === 'true';
+  }
 
 indiceEditando = -1;
 
@@ -39,24 +42,36 @@ indiceEditando = -1;
       genero: ['', Validators.required],
     });
   }
+   verificarEnvio(event: Event): void {
+      if (!this.isLoggedIn) {
+        event.preventDefault(); // Detiene el envío
+        Swal.fire({
+          icon: 'warning',
+          title: 'Acceso denegado',
+          text: 'Debes iniciar sesión para enviar el formulario.'
+        });
+        return;
+      }
 
-  ngOnInit() {
-    const registro = localStorage.getItem('registroEditando');
-    if (registro) {
-      const { tipo, index } = JSON.parse(registro);
-      if (tipo === 'suscripcion') {
-        const suscripciones = JSON.parse(localStorage.getItem('suscripciones') || '[]');
-        const datos = suscripciones[index];
-        if (datos) {
-          this.editando = true;
-          this.indiceEditando = index;
-          this.suscripcionForm.patchValue({
-            nombre: datos.nombre,
-            correo: datos.correo,
-            fecha: datos.fecha,
-            plan: datos.plan,
-            genero: datos.genero
-          });
+      this.onSubmit();
+    }
+ngOnInit() {
+  const registro = localStorage.getItem('registroEditando');
+  if (registro) {
+    const { tipo, index } = JSON.parse(registro);
+    if (tipo === 'suscripcion') {
+      const suscripciones = JSON.parse(localStorage.getItem('suscripciones') || '[]');
+      const datos = suscripciones[index];
+      if (datos) {
+        this.editando = true;
+        this.indiceEditando = index;
+        this.suscripcionForm.patchValue({
+          nombre: datos.nombre,
+          correo: datos.correo,
+          fecha: datos.fecha,
+          plan: datos.plan,
+          genero: datos.genero
+        });
 
           // Setear checkboxes de objetivos:
           datos.objetivos.forEach((valor: boolean, i: number) => {

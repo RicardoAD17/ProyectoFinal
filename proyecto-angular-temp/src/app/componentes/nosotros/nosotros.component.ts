@@ -28,6 +28,9 @@ export class NosotrosComponent {
   submitted = false;
   editando = false;
   indiceEditando = -1;
+  get isLoggedIn(): boolean {
+    return localStorage.getItem('logueado') === 'true';
+  }
 
 
   constructor(private equipoService: EquipoService) {}
@@ -49,7 +52,19 @@ export class NosotrosComponent {
     }
   }
 }
+   verificarEnvio(event: Event): void {
+      if (!this.isLoggedIn) {
+        event.preventDefault(); // Detiene el envío
+        Swal.fire({
+          icon: 'warning',
+          title: 'Acceso denegado',
+          text: 'Debes iniciar sesión para enviar el formulario.'
+        });
+        return;
+      }
 
+      this.onSubmit();
+    }
 
   isValid(): boolean {
   return (
