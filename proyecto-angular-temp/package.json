@@ -22,6 +22,7 @@
     "@angular/router": "^19.2.14",
     "@angular/service-worker": "^19.2.14",
     "angular-cli-ghpages": "^2.0.3",
+    "angularx-qrcode": "^20.0.0",
     "aos": "^2.3.4",
     "bootstrap": "^5.3.5",
     "firebase": "^10.12.2",
