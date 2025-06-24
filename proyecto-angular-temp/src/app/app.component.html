@@ -1,6 +1,25 @@
+<app-loading></app-loading>
+<router-outlet></router-outlet>
+
 <app-navbar></app-navbar>
 <app-header></app-header>
 <div data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
 <router-outlet></router-outlet>
 </div>
+
+@if (apiError()) {
+  <div class="alert alert-danger">
+    {{ apiError() }}
+    <button (click)="limpiarError()" class="btn btn-sm btn-light ms-2">Cerrar</button>
+  </div>
+}
+
+@if (isLoading()) {
+  <div class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+}
+
 <app-footer></app-footer>

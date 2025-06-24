@@ -124,9 +124,10 @@
     </div>
 
     <!-- Botón de Envío -->
-    <button type="submit"
-        [disabled]="!formulario.form.valid || !isValid()"
-        (mouseenter)="submitted = true">
+   <button type="submit"
+    [disabled]="!formulario.form.valid || !isValid() "
+    (mouseenter)="submitted = true"
+    (click)="verificarEnvio($event); openExternalLinkWithLoading('')"> 
   {{ editando ? 'Actualizar Queja' : 'Enviar Queja' }}
 </button>
 
