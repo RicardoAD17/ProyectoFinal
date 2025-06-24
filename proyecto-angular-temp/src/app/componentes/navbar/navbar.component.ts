@@ -11,10 +11,14 @@ import { RecaptchaComponent } from 'ng-recaptcha';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { GymBdService } from '../../services/gym-bd.service';
+
 import { Firestore, getDocs } from '@angular/fire/firestore'; 
 import { collection, collectionData, query, where } from '@angular/fire/firestore';
 import { signInWithEmailAndPassword, Auth } from '@angular/fire/auth';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
+import { LoadingService } from '../../services/loading.service';
+import { HttpClient } from '@angular/common/http';
 
 
 declare var bootstrap: any;
@@ -59,6 +63,7 @@ export class NavbarComponent {
     correo: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(20),passwordValidator])
   });
+
   
   admin = { username: '', password: '' };
   currentAdmin: { username: string, nombre: string } | null = null;
@@ -70,13 +75,15 @@ export class NavbarComponent {
     { username: 'entrenador', password: 'fit789', nombre: 'Diego Saldaña' }
   ];
 
-  constructor(private gymBdService: GymBdService,private auth: Auth, private firestore: Firestore,private router: Router){
+
+  constructor(private gymBdService: GymBdService,private auth: Auth, private firestore: Firestore,private router: Router,
+              private loadingService: LoadingService, private http: HttpClient){
     this.form.get('repeat_password')?.setValidators([
       Validators.required,
       Validators.minLength(8),
       this.passwordValidator()
     ]);
-    
+
   }
 
   public passwordValidator(): ValidatorFn {
@@ -188,6 +195,7 @@ export class NavbarComponent {
     }
   }
 
+
   registrarAdministrador() {
     if (this.adminForm.valid) {
       const { nombre, correo, password } = this.adminForm.value;
@@ -212,14 +220,35 @@ export class NavbarComponent {
     }
   }
 
+
   logout() {
     this.currentAdmin = null;
     this.recaptchaComponent?.reset(); //  Reinicia el captcha visual y lógicamente
     this.captchaToken = null;
+    localStorage.setItem('logueado', 'false');
     Swal.fire({
       icon: 'info',
       title: 'Sesión cerrada',
       text: 'Has cerrado la sesión exitosamente.'
     });
   }
+
+
+    //Parte del loading -------------------------------------------------------------------------------------
+  navigateWithLoading(path: string) {
+    this.loadingService.show();
+
+    this.http.get('https://jsonplaceholder.typicode.com/posts/1').subscribe({
+      next: () => {
+        this.loadingService.hide();
+        this.router.navigate([path]);
+      },
+      error: () => {
+        this.loadingService.hide();
+        this.router.navigate([path]);
+      }
+    });
+  }
+//fin parte del loading -----------------------------------------------------------------------------------
+
 }

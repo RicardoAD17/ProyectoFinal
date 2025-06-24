@@ -36,6 +36,7 @@ export class GymBdService {
       correo: usuario.correo
       // no guardes la contraseña aquí, Firebase la maneja
     });
+
   }
 
   async registrarAdministrador(admin: { nombre: string, correo: string, password: string }) {
