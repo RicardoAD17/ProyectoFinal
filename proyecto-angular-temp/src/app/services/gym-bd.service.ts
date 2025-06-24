@@ -24,6 +24,7 @@ export class GymBdService {
   }
 
   //Usuarios
+  
   // Registro con Firebase Authentication y Firestore
   async registrarUsuario(usuario: Usuarios) {
     const credenciales = await createUserWithEmailAndPassword(this.auth, usuario.correo, usuario.password);
@@ -63,4 +64,5 @@ export class GymBdService {
     return snapshot.empty ? null : snapshot.docs[0].data();
   }
 
+  
 }
