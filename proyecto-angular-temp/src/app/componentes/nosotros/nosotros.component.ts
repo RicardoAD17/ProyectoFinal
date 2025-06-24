@@ -4,6 +4,9 @@ import Swal from 'sweetalert2';
 import { Queja } from '../queja.interface';
 import { CommonModule } from '@angular/common';
 import { EquipoService, Integrante } from '../equipo.service';
+import { Router } from '@angular/router';
+import { LoadingService } from '../../services/loading.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-nosotros',
@@ -33,7 +36,7 @@ export class NosotrosComponent {
   }
 
 
-  constructor(private equipoService: EquipoService) {}
+  constructor(private equipoService: EquipoService, private router:Router,private loadingService: LoadingService, private http: HttpClient) {}
 
   ngOnInit(): void {
   this.integrantes = this.equipoService.getIntegrantes();
@@ -157,5 +160,37 @@ handleChange(event: Event, opcion: string): void {
     }
   }
 }
+
+ //Parte del loading -------------------------------------------------------------------------------------
+  navigateWithLoading(path: string) {
+    this.loadingService.show();
+
+    this.http.get('https://jsonplaceholder.typicode.com/posts/1').subscribe({
+      next: () => {
+        this.loadingService.hide();
+        this.router.navigate([path]);
+      },
+      error: () => {
+        this.loadingService.hide();
+        this.router.navigate([path]);
+      }
+    });
+  }
+
+  openExternalLinkWithLoading(url: string) {
+    this.loadingService.show();
+
+    // Se hace una petición real a un endpoint
+    this.http.get('https://jsonplaceholder.typicode.com/posts/1').subscribe({
+      next: () => {
+        this.loadingService.hide();
+      },
+      error: () => {
+        this.loadingService.hide();
+      }
+    });
+  }
+//fin parte del loading -----------------------------------------------------------------------------------
+
 
 }

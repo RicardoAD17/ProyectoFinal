@@ -178,7 +178,7 @@
             </re-captcha>
           </div>
 
-          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Ingresar</button>
+          <button mat-raised-button color="primary" (click)="navigateWithLoading('')" type="submit" [disabled]="form.invalid">Ingresar</button>
         </form>
       </div>
     </div>
