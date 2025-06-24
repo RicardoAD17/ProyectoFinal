@@ -59,7 +59,7 @@ export class EquipoService {
       nombre: 'Valeria Michelle Saucedo Díaz',
       id: '352288',
       edad: 20,
-      foto: 'assets/Ilse.jpg',
+      foto: 'assets/Vale.jpg',
       carrera: 'Ing. en Sistemas Computacionales',
       semestre: '6° C'
     }
