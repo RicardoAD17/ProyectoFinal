@@ -33,7 +33,7 @@
           </li>
         } @else {
           <li class="nav-item">
-            <a class="nav-link text-primary fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#adminLoginModal">Login</a>
+            <a class="nav-link text-primary fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#adminLoginModal">Sign Up</a>
           </li>
         }
       </ul>
@@ -72,19 +72,104 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="adminLoginModalLabel">Inicio de sesión</h5>
+        <h5 class="modal-title" id="adminLoginModalLabel">Sign Up</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="adminUsername" class="form-label">Usuario</label>
-            <input type="text" class="form-control" id="adminUsername" placeholder="admin1" [(ngModel)]="admin.username" name="username">
-          </div>
-          <div class="mb-3">
-            <label for="adminPassword" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="adminPassword" placeholder="********" [(ngModel)]="admin.password" name="password">
-          </div>
+        <!--AQUI-->
+        <form [formGroup]="form" (ngSubmit)="enviarFormulario()">
+          <!--Nombre-->
+          <mat-form-field appearance="fill">
+            <mat-label>Nombre</mat-label>
+            <input matInput id="nombre" type="text" formControlName="nombre" />
+
+            @if (form.get('nombre')?.touched && form.get('nombre')?.invalid) {
+              <div>
+                @if (form.get('nombre')?.errors?.['required']) {
+                  <mat-error>El nombre es requerido.</mat-error>
+                }
+                @if (form.get('nombre')?.errors?.['pattern']) {
+                  <mat-error>El nombre solo debe contener letras y espacios.</mat-error>
+                }
+                @if (form.get('nombre')?.errors?.['minlength']) {
+                  <mat-error>El nombre debe tener al menos 10 caracteres.</mat-error>
+                }
+                @if (form.get('nombre')?.errors?.['maxlength']) {
+                  <mat-error>El nombre pasa el máximo de caracteres.</mat-error>
+                }
+              </div>
+            }
+          </mat-form-field>
+
+          <!--Email-->
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput id="email" type="email" formControlName="email" />
+
+            @if (form.get('email')?.touched && form.get('email')?.invalid) {
+              <div>
+                @if (form.get('email')?.errors?.['required']) {
+                  <mat-error>El email es requerido.</mat-error>
+                }
+                @if (form.get('email')?.errors?.['email']) {
+                  <mat-error>El email no es válido.</mat-error>
+                }
+              </div>
+            }
+          </mat-form-field>
+
+          <!--Contraseña-->
+          <mat-form-field appearance="fill">
+            <mat-label>Contraseña</mat-label>
+            <input matInput id="password" type="password" formControlName="password" />
+            @if (form.get('password')?.touched && form.get('password')?.invalid) {
+              <div>
+                @if (form.get('password')?.errors?.['required']) {
+                  <mat-error>La contraseña es requerida.</mat-error>
+                }
+                @if (form.get('password')?.errors?.['minlength']) {
+                  <mat-error>Debes tener al menos 8 caracteres.</mat-error>
+                }
+                @if (form.get('password')?.errors?.['maxlength']) {
+                  <mat-error>La contraseña pasa el máximo de caracteres.</mat-error>
+                }
+                @if (form.get('password')?.errors?.['invalidPassword']) {
+                  <mat-error>
+                    La contraseña debe contener solo letras, números o _ (guion bajo), al menos una mayúscula y un número.
+                  </mat-error>
+                }
+              </div>
+            }
+          </mat-form-field>
+
+          <!--Repetir Contraseña-->
+          <mat-form-field appearance="fill">
+            <mat-label>Repetir contraseña</mat-label>
+            <input matInput id="repeat_password" type="password" formControlName="repeat_password" />
+
+            @if (form.get('repeat_password')?.touched && form.get('repeat_password')?.invalid) {
+              <div>
+                @if (form.get('repeat_password')?.errors?.['required']) {
+                <mat-error>Campo obligatorio.</mat-error>
+              }
+              @if (form.get('repeat_password')?.errors?.['minlength']) {
+                <mat-error>Debes tener al menos 8 caracteres.</mat-error>
+              }
+              @if (form.get('repeat_password')?.errors?.['maxlength']) {
+                <mat-error>La contraseña pasa el máximo de caracteres.</mat-error>
+              }
+              @if (form.get('repeat_password')?.errors?.['invalidPassword']) {
+                  <mat-error>
+                    La contraseña debe contener solo letras, números o _ (guion bajo), al menos una mayúscula y un número.
+                  </mat-error>
+                }
+              @if (form.get('repeat_password')?.errors?.['isValid'] === false) {
+                <mat-error>Las contraseñas no coinciden.</mat-error>
+              }
+              </div>
+            }
+          </mat-form-field>
+  
           <div class="mb-3">
             <re-captcha
               #recaptchaRef
@@ -93,16 +178,8 @@
             </re-captcha>
           </div>
 
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Ingresar</button>
         </form>
-        @if (loginError) {
-          <div class="alert alert-danger mt-2">
-            Usuario o contraseña incorrectos.
-          </div>
-        }
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" (click)="login()">Iniciar sesión</button>
       </div>
     </div>
   </div>
