@@ -2,11 +2,8 @@ import { Injectable } from '@angular/core';
 import { addDoc, collection, Firestore } from '@angular/fire/firestore';
 import { Suscripcion } from '../interfacesBD/Formularios.interface';
 import { Queja } from '../componentes/queja.interface';
-<<<<<<< HEAD
-=======
 import { Usuarios} from '../interfacesBD/Usuarios.interface';
 import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
->>>>>>> ec1f3c105991aea59a1d4c76b35ac9f60d6a49f3
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +24,6 @@ export class GymBdService {
   }
 
   //Usuarios
-<<<<<<< HEAD
-=======
   // Registro con Firebase Authentication y Firestore
   async registrarUsuario(usuario: Usuarios) {
     const credenciales = await createUserWithEmailAndPassword(this.auth, usuario.correo, usuario.password);
@@ -42,7 +37,6 @@ export class GymBdService {
       // no guardes la contraseña aquí, Firebase la maneja
     });
   }
->>>>>>> ec1f3c105991aea59a1d4c76b35ac9f60d6a49f3
   agregarUsuario(usuario: any) {
     const usuariosRef = collection(this.firestore, 'usuarios');
     return addDoc(usuariosRef, usuario);
