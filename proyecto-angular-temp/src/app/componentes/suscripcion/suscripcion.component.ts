@@ -197,7 +197,6 @@ fechaRangoValida(control: AbstractControl): ValidationErrors | null {
   return null;
 }
 
-
 videoEstilos = {
   backgroundColor: '#f4faff',
   padding: '10px',

@@ -6,8 +6,6 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
 import { enableProdMode, isDevMode } from '@angular/core';
 import { provideServiceWorker } from '@angular/service-worker';
-
-
 import { environment } from './environments/environments';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
