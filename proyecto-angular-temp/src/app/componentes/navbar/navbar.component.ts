@@ -111,7 +111,7 @@ export class NavbarComponent {
       const cred = await signInWithEmailAndPassword(this.auth, email, password);
       const uid = cred.user.uid;
 
-      // 🔄 Usa los métodos del servicio para buscar en Firestore
+      // Buscar
       const adminData = await this.gymBdService.obtenerAdministradorPorUID(uid);
       if (adminData) {
         this.currentAdmin = {

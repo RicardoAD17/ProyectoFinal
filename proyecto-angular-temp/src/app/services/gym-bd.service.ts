@@ -34,7 +34,6 @@ export class GymBdService {
       uid: credenciales.user.uid,
       nombre: usuario.nombre,
       correo: usuario.correo
-      // no guardes la contraseña aquí, Firebase la maneja
     });
   }
 
