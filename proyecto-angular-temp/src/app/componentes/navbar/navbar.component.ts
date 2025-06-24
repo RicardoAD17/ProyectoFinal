@@ -9,6 +9,10 @@ import { RecaptchaModule } from 'ng-recaptcha';
 import { ViewChild } from '@angular/core';
 import { RecaptchaComponent } from 'ng-recaptcha';
 
+import { Router } from '@angular/router';
+import { LoadingService } from '../../services/loading.service';
+import { HttpClient } from '@angular/common/http';
+
 declare var bootstrap: any;
 @Component({
   selector: 'app-navbar',
@@ -85,4 +89,24 @@ export class NavbarComponent {
       text: 'Has cerrado la sesión exitosamente.'
     });
   }
+
+
+    //Parte del loading -------------------------------------------------------------------------------------
+  constructor(private router:Router,private loadingService: LoadingService, private http: HttpClient){}
+  navigateWithLoading(path: string) {
+    this.loadingService.show();
+
+    this.http.get('https://jsonplaceholder.typicode.com/posts/1').subscribe({
+      next: () => {
+        this.loadingService.hide();
+        this.router.navigate([path]);
+      },
+      error: () => {
+        this.loadingService.hide();
+        this.router.navigate([path]);
+      }
+    });
+  }
+//fin parte del loading -----------------------------------------------------------------------------------
+
 }
