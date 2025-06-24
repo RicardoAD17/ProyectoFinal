@@ -4,7 +4,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { RecaptchaModule } from 'ng-recaptcha';
 import { ViewChild } from '@angular/core';
 import { RecaptchaComponent } from 'ng-recaptcha';
@@ -12,11 +12,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { GymBdService } from '../../services/gym-bd.service';
 
-import { Firestore, getDocs } from '@angular/fire/firestore'; 
-import { collection, collectionData, query, where } from '@angular/fire/firestore';
+import { Firestore} from '@angular/fire/firestore'; 
 import { signInWithEmailAndPassword, Auth } from '@angular/fire/auth';
-import { firstValueFrom } from 'rxjs';
-import { Router } from '@angular/router';
 import { LoadingService } from '../../services/loading.service';
 import { HttpClient } from '@angular/common/http';
 
