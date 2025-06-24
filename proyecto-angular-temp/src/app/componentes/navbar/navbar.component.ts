@@ -64,7 +64,7 @@ export class NavbarComponent {
     { username: 'entrenador', password: 'fit789', nombre: 'Diego Saldaña' }
   ];
 
-  constructor(private gymBdService: GymBdService){
+  constructor(private gymBdService: GymBdService, private router:Router,private loadingService: LoadingService, private http: HttpClient){
     this.form.get('repeat_password')?.setValidators([
       Validators.required,
       Validators.minLength(8),
@@ -166,7 +166,6 @@ export class NavbarComponent {
 
 
     //Parte del loading -------------------------------------------------------------------------------------
-  constructor(private router:Router,private loadingService: LoadingService, private http: HttpClient){}
   navigateWithLoading(path: string) {
     this.loadingService.show();
 
