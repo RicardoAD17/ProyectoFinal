@@ -1,2 +1,8 @@
- <canvas #qrCanvas></canvas>
-    <button (click)="generarQR()">Generar QR</button>
+<input type="text" [(ngModel)]="textoQR">
+<button (click)="generarQR(textoQR)">Generar QR</button>
+
+<br><br>
+
+<canvas #qrCanvas></canvas>
+
+<button (click)="obtenerDatos()">Generar QR con datos del API</button>
