@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { Suscripcion } from '../interfacesBD/Formularios.interface';
 import { Queja } from '../componentes/queja.interface';
 import { Usuarios} from '../interfacesBD/Usuarios.interface';
@@ -35,18 +35,19 @@ export class GymBdService {
       uid: credenciales.user.uid,
       nombre: usuario.nombre,
       correo: usuario.correo
-      // no guardes la contraseña aquí, Firebase la maneja
     });
-  }
-  agregarUsuario(usuario: any) {
-    const usuariosRef = collection(this.firestore, 'usuarios');
-    return addDoc(usuariosRef, usuario);
+
   }
 
-  //Administrador
-  agregarAdministrador(admin: any) {
-    const adminRef = collection(this.firestore, 'administradores');
-    return addDoc(adminRef, admin);
+  async registrarAdministrador(admin: { nombre: string, correo: string, password: string }) {
+    const cred = await createUserWithEmailAndPassword(this.auth, admin.correo, admin.password);
+
+    const ref = collection(this.firestore, 'administradores');
+    return addDoc(ref, {
+      uid: cred.user.uid,
+      nombre: admin.nombre,
+      correo: admin.correo
+    });
   }
 
   // Formulario suscripcion con Firestore
@@ -54,4 +55,18 @@ export class GymBdService {
   const ref = doc(this.firestore, 'formularioSuscripcion', id);
   return getDoc(ref);
   }
+  async obtenerAdministradorPorUID(uid: string) {
+    const ref = collection(this.firestore, 'administradores');
+    const q = query(ref, where('uid', '==', uid));
+    const snapshot = await getDocs(q);
+    return snapshot.empty ? null : snapshot.docs[0].data();
+  }
+
+  async obtenerUsuarioPorUID(uid: string) {
+    const ref = collection(this.firestore, 'usuarios');
+    const q = query(ref, where('uid', '==', uid));
+    const snapshot = await getDocs(q);
+    return snapshot.empty ? null : snapshot.docs[0].data();
+  }
+
 }
