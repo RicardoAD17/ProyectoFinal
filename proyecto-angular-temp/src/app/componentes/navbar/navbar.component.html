@@ -47,12 +47,13 @@
         }
       </ul>
       
-      @if (currentAdmin) {
+      @if (userTipo === 'admin') {
         <a class="nav-link d-flex align-items-center" routerLink="/tablas" (click)="navigateWithLoading('/tablas')" title="Ir a Tablas" routerLinkActive="active">
+          <!-- icono -->
           <svg xmlns="http://www.w3.org/2000/svg"
-               width="24" height="24" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round">
+              width="24" height="24" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
             <path d="M15 17h2" />
             <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
             <path d="M11 12h6" />
@@ -60,11 +61,11 @@
           </svg>
         </a>
       } @else {
-        <span class="nav-link d-flex align-items-center text-muted" title="Inicia sesión para acceder" style="cursor: not-allowed;">
+        <span class="nav-link d-flex align-items-center text-muted" title="Solo para administradores" style="cursor: not-allowed;">
           <svg xmlns="http://www.w3.org/2000/svg"
-               width="24" height="24" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round">
+              width="24" height="24" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
             <path d="M15 17h2" />
             <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
             <path d="M11 12h6" />

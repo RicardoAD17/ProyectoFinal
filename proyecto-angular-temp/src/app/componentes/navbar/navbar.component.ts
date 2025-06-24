@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -45,7 +45,7 @@ export function passwordValidator(control: AbstractControl): ValidationErrors | 
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   @ViewChild('recaptchaRef') recaptchaComponent!: RecaptchaComponent;
 
   public form: FormGroup = new FormGroup({
@@ -61,16 +61,17 @@ export class NavbarComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(20),passwordValidator])
   });
 
-  
-  admin = { username: '', password: '' };
   currentAdmin: { username: string, nombre: string } | null = null;
   loginError = false;
 
-  validAdmins = [
-    { username: 'admin1', password: 'admin123', nombre: 'Jaime López' },
-    { username: 'admin2', password: 'clave456', nombre: 'Ricardo Almada' },
-    { username: 'entrenador', password: 'fit789', nombre: 'Diego Saldaña' }
-  ];
+  userTipo: string | null = null;
+  ngOnInit(): void {
+    const stored = localStorage.getItem('usuarioActual');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      this.userTipo = parsed.tipo; // 'admin' o 'usuario'
+    }
+  }
 
 
   constructor(private gymBdService: GymBdService,private auth: Auth, private firestore: Firestore,private router: Router,
@@ -128,7 +129,7 @@ export class NavbarComponent {
           nombre: adminData['nombre'],
           uid
         }));
-
+        this.userTipo = 'admin';
         Swal.fire('Administrador', `Bienvenido administrador ${adminData['nombre']}`, 'success');
         this.router.navigate(['/tablas']);
       } else {
@@ -145,7 +146,7 @@ export class NavbarComponent {
             nombre: userData['nombre'],
             uid
           }));
-
+          this.userTipo = 'usuario';
           Swal.fire('Bienvenido', `Hola ${userData['nombre']}`, 'success');
         } else {
           this.currentAdmin = null;
@@ -228,6 +229,8 @@ export class NavbarComponent {
       title: 'Sesión cerrada',
       text: 'Has cerrado la sesión exitosamente.'
     });
+    this.userTipo = null;
+    localStorage.removeItem('usuarioActual');
   }
 
 
