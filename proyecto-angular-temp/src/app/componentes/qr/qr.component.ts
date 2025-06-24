@@ -6,11 +6,7 @@ import * as QRCode from 'qrcode';
 @Component({
   selector: 'app-qr',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
-  template: `
-    <canvas #qrCanvas></canvas>
-    <button (click)="obtenerDatos()">Generar QR con datos del API</button>
-  `
+  imports: [CommonModule, HttpClientModule]
 })
 export class QrComponent {
 
