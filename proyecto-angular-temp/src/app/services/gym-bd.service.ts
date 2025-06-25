@@ -55,6 +55,7 @@ export class GymBdService {
   const ref = doc(this.firestore, 'formularioSuscripcion', id);
   return getDoc(ref);
   }
+  
   async obtenerAdministradorPorUID(uid: string) {
     const ref = collection(this.firestore, 'administradores');
     const q = query(ref, where('uid', '==', uid));
