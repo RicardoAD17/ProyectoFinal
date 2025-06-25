@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -16,7 +16,8 @@ import { Firestore} from '@angular/fire/firestore';
 import { signInWithEmailAndPassword, Auth } from '@angular/fire/auth';
 import { LoadingService } from '../../services/loading.service';
 import { HttpClient } from '@angular/common/http';
-
+import { GithubAuthProvider, signInWithPopup } from '@angular/fire/auth';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 declare var bootstrap: any;
 
@@ -45,8 +46,10 @@ export function passwordValidator(control: AbstractControl): ValidationErrors | 
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   @ViewChild('recaptchaRef') recaptchaComponent!: RecaptchaComponent;
+
+  recaptchaVerifier: RecaptchaVerifier | undefined;
 
   public form: FormGroup = new FormGroup({
     nombre: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/),Validators.minLength(10),Validators.maxLength(40)]),
@@ -61,16 +64,21 @@ export class NavbarComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(20),passwordValidator])
   });
 
-  
-  admin = { username: '', password: '' };
   currentAdmin: { username: string, nombre: string } | null = null;
   loginError = false;
 
-  validAdmins = [
-    { username: 'admin1', password: 'admin123', nombre: 'Jaime López' },
-    { username: 'admin2', password: 'clave456', nombre: 'Ricardo Almada' },
-    { username: 'entrenador', password: 'fit789', nombre: 'Diego Saldaña' }
-  ];
+  userTipo: string | null = null;
+  ngOnInit(): void {
+    const stored = localStorage.getItem('usuarioActual');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      this.userTipo = parsed.tipo; // 'admin' o 'usuario'
+    }
+  }
+
+  telefono: string = '';
+  codigoVerificacion: string = '';
+  confirmacionSMS: any;
 
 
   constructor(private gymBdService: GymBdService,private auth: Auth, private firestore: Firestore,private router: Router,
@@ -82,7 +90,7 @@ export class NavbarComponent {
     ]);
 
   }
-
+  
   public passwordValidator(): ValidatorFn {
     return () => {
       const password = this.form.get('password')?.value;
@@ -128,7 +136,7 @@ export class NavbarComponent {
           nombre: adminData['nombre'],
           uid
         }));
-
+        this.userTipo = 'admin';
         Swal.fire('Administrador', `Bienvenido administrador ${adminData['nombre']}`, 'success');
         this.router.navigate(['/tablas']);
       } else {
@@ -145,7 +153,7 @@ export class NavbarComponent {
             nombre: userData['nombre'],
             uid
           }));
-
+          this.userTipo = 'usuario';
           Swal.fire('Bienvenido', `Hola ${userData['nombre']}`, 'success');
         } else {
           this.currentAdmin = null;
@@ -168,6 +176,54 @@ export class NavbarComponent {
       this.captchaToken = null;
     }
   }
+
+  async loginConGitHub() {
+    try {
+      const provider = new GithubAuthProvider();
+      const cred = await signInWithPopup(this.auth, provider);
+
+      const nombre = cred.user.displayName || 'Sin nombre';
+      const correo = cred.user.email || 'Correo no disponible';
+      const uid = cred.user.uid;
+
+      // Guarda en localStorage
+      localStorage.setItem('usuarioActual', JSON.stringify({
+        tipo: 'github',
+        nombre,
+        correo,
+        uid
+      }));
+
+      this.currentAdmin = { username: correo, nombre };
+
+      Swal.fire('¡Bienvenido!', `Hola ${nombre}, has iniciado sesión con GitHub.`, 'success');
+
+      // Cierra el modal si está abierto
+      const modal = document.getElementById('LogInModal');
+      if (modal) bootstrap.Modal.getInstance(modal)?.hide();
+
+    } catch (error: any) {
+      console.error('Error de GitHub login:', error);
+      Swal.fire('Error', error.message, 'error');
+    }
+  }
+  /*
+  enviarCodigoTelefono() {
+    if (!this.telefono.startsWith('+')) {
+      Swal.fire('Formato incorrecto', 'Incluye el código de país. Ej: +521234567890', 'warning');
+      return;
+    }
+
+    signInWithPhoneNumber(this.auth, this.telefono, this.recaptchaVerifier)
+      .then((confirmationResult) => {
+        this.confirmacionSMS = confirmationResult;
+        Swal.fire('Código enviado', 'Revisa tu SMS para el código de verificación.', 'info');
+      })
+      .catch((error) => {
+        console.error(error);
+        Swal.fire('Error al enviar código', error.message, 'error');
+      });
+  }*/
 
 
   enviarFormulario() {
@@ -228,6 +284,8 @@ export class NavbarComponent {
       title: 'Sesión cerrada',
       text: 'Has cerrado la sesión exitosamente.'
     });
+    this.userTipo = null;
+    localStorage.removeItem('usuarioActual');
   }
 
 
