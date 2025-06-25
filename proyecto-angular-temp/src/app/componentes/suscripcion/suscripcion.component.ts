@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { PlanesComponent } from '../planes/planes.component';
@@ -18,74 +18,74 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './suscripcion.component.html',
   styleUrl: './suscripcion.component.css'
 })
-export class SuscripcionComponent {
+export class SuscripcionComponent implements OnInit {
   suscripcionForm: FormGroup;
   planes = ['Básico', 'Intermedio', 'Avanzado'];
   objetivos = ['Perder peso', 'Ganar masa muscular', 'Mantener condición'];
   editando = false;
   hovering = false;
   video:string="I_RYujJvZ7s"; // videoo
-    get isLoggedIn(): boolean {
-    return localStorage.getItem('logueado') === 'true';
-  }
+  isLoggedIn: boolean = false;
 
-indiceEditando = -1;
+  indiceEditando = -1;
 
   constructor(private fb: FormBuilder,private gymBdService: GymBdService, private router:Router,private loadingService: LoadingService, private http: HttpClient) {
     const fechaMinima = new Date();
     this.suscripcionForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
-      correo: [
-        '',
-        [Validators.required, Validators.email],
-      ],
+      correo: ['',[Validators.required, Validators.email],],
       fecha: ['', [Validators.required, this.fechaNoPasadaValidator,this.fechaRangoValida]],
       plan: ['', Validators.required],
       objetivos: this.buildObjetivos(),
       genero: ['', Validators.required],
     });
   }
-   verificarEnvio(event: Event): void {
-      if (!this.isLoggedIn) {
-        event.preventDefault(); // Detiene el envío
-        Swal.fire({
-          icon: 'warning',
-          title: 'Acceso denegado',
-          text: 'Debes iniciar sesión para enviar el formulario.'
-        });
-        return;
-      }
+  verificarEnvio(event: Event): void {
+    const logueado = localStorage.getItem('logueado') === 'true';
 
-      this.onSubmit();
+    if (!logueado) {
+      event.preventDefault();
+      Swal.fire({
+        icon: 'warning',
+        title: 'Acceso denegado',
+        text: 'Debes iniciar sesión para enviar el formulario.'
+      });
+      return;
     }
-ngOnInit() {
-  const registro = localStorage.getItem('registroEditando');
-  if (registro) {
-    const { tipo, index } = JSON.parse(registro);
-    if (tipo === 'suscripcion') {
-      const suscripciones = JSON.parse(localStorage.getItem('suscripciones') || '[]');
-      const datos = suscripciones[index];
-      if (datos) {
-        this.editando = true;
-        this.indiceEditando = index;
-        this.suscripcionForm.patchValue({
-          nombre: datos.nombre,
-          correo: datos.correo,
-          fecha: datos.fecha,
-          plan: datos.plan,
-          genero: datos.genero
-        });
 
-          // Setear checkboxes de objetivos:
-          datos.objetivos.forEach((valor: boolean, i: number) => {
-            (this.objetivosFormArray.at(i) as any).setValue(valor);
-          });
+    this.onSubmit();
+  }
+
+
+    ngOnInit() {
+      this.isLoggedIn = localStorage.getItem('logueado') === 'true';
+      const registro = localStorage.getItem('registroEditando');
+      if (registro) {
+        const { tipo, index } = JSON.parse(registro);
+        if (tipo === 'suscripcion') {
+          const suscripciones = JSON.parse(localStorage.getItem('suscripciones') || '[]');
+          const datos = suscripciones[index];
+          if (datos) {
+            this.editando = true;
+            this.indiceEditando = index;
+            this.suscripcionForm.patchValue({
+              nombre: datos.nombre,
+              correo: datos.correo,
+              fecha: datos.fecha,
+              plan: datos.plan,
+              genero: datos.genero
+            });
+
+            // Setear checkboxes de objetivos:
+            datos.objetivos.forEach((valor: boolean, i: number) => {
+              (this.objetivosFormArray.at(i) as any).setValue(valor);
+            });
+          }
         }
       }
     }
-  }
-
   
+
 
   buildObjetivos(): FormArray {
     return this.fb.array(
