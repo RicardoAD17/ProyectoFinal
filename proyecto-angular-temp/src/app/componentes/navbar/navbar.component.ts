@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -16,7 +16,8 @@ import { Firestore} from '@angular/fire/firestore';
 import { signInWithEmailAndPassword, Auth } from '@angular/fire/auth';
 import { LoadingService } from '../../services/loading.service';
 import { HttpClient } from '@angular/common/http';
-
+import { GithubAuthProvider, signInWithPopup } from '@angular/fire/auth';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 declare var bootstrap: any;
 
@@ -48,6 +49,8 @@ export function passwordValidator(control: AbstractControl): ValidationErrors | 
 export class NavbarComponent implements OnInit {
   @ViewChild('recaptchaRef') recaptchaComponent!: RecaptchaComponent;
 
+  recaptchaVerifier: RecaptchaVerifier | undefined;
+
   public form: FormGroup = new FormGroup({
     nombre: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/),Validators.minLength(10),Validators.maxLength(40)]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -73,6 +76,10 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  telefono: string = '';
+  codigoVerificacion: string = '';
+  confirmacionSMS: any;
+
 
   constructor(private gymBdService: GymBdService,private auth: Auth, private firestore: Firestore,private router: Router,
               private loadingService: LoadingService, private http: HttpClient){
@@ -83,7 +90,7 @@ export class NavbarComponent implements OnInit {
     ]);
 
   }
-
+  
   public passwordValidator(): ValidatorFn {
     return () => {
       const password = this.form.get('password')?.value;
@@ -169,6 +176,54 @@ export class NavbarComponent implements OnInit {
       this.captchaToken = null;
     }
   }
+
+  async loginConGitHub() {
+    try {
+      const provider = new GithubAuthProvider();
+      const cred = await signInWithPopup(this.auth, provider);
+
+      const nombre = cred.user.displayName || 'Sin nombre';
+      const correo = cred.user.email || 'Correo no disponible';
+      const uid = cred.user.uid;
+
+      // Guarda en localStorage
+      localStorage.setItem('usuarioActual', JSON.stringify({
+        tipo: 'github',
+        nombre,
+        correo,
+        uid
+      }));
+
+      this.currentAdmin = { username: correo, nombre };
+
+      Swal.fire('¡Bienvenido!', `Hola ${nombre}, has iniciado sesión con GitHub.`, 'success');
+
+      // Cierra el modal si está abierto
+      const modal = document.getElementById('LogInModal');
+      if (modal) bootstrap.Modal.getInstance(modal)?.hide();
+
+    } catch (error: any) {
+      console.error('Error de GitHub login:', error);
+      Swal.fire('Error', error.message, 'error');
+    }
+  }
+  /*
+  enviarCodigoTelefono() {
+    if (!this.telefono.startsWith('+')) {
+      Swal.fire('Formato incorrecto', 'Incluye el código de país. Ej: +521234567890', 'warning');
+      return;
+    }
+
+    signInWithPhoneNumber(this.auth, this.telefono, this.recaptchaVerifier)
+      .then((confirmationResult) => {
+        this.confirmacionSMS = confirmationResult;
+        Swal.fire('Código enviado', 'Revisa tu SMS para el código de verificación.', 'info');
+      })
+      .catch((error) => {
+        console.error(error);
+        Swal.fire('Error al enviar código', error.message, 'error');
+      });
+  }*/
 
 
   enviarFormulario() {
