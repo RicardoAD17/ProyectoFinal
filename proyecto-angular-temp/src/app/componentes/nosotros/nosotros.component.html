@@ -17,7 +17,8 @@
   </div>
 </section>
 
-<form (ngSubmit)="onSubmit()" #formulario="ngForm" class="form-container" novalidate>
+<form (ngSubmit)="verificarEnvio($event)" #formulario="ngForm" class="form-container" novalidate>
+
     <fieldset>
       <legend class="form-legend">Inserta tu queja</legend>
 
@@ -125,11 +126,12 @@
 
     <!-- Botón de Envío -->
    <button type="submit"
-    [disabled]="!formulario.form.valid || !isValid() "
-    (mouseenter)="submitted = true"
-    (click)="verificarEnvio($event); openExternalLinkWithLoading('')"> 
+        [disabled]="!formulario.form.valid || !isValid()"
+        (mouseenter)="submitted = true">
   {{ editando ? 'Actualizar Queja' : 'Enviar Queja' }}
 </button>
+
+
 
 
   </fieldset>

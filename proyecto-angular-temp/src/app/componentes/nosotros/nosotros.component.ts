@@ -7,6 +7,7 @@ import { EquipoService, Integrante } from '../equipo.service';
 import { Router } from '@angular/router';
 import { LoadingService } from '../../services/loading.service';
 import { HttpClient } from '@angular/common/http';
+import { GymBdService } from '../../services/gym-bd.service';
 
 @Component({
   selector: 'app-nosotros',
@@ -36,7 +37,7 @@ export class NosotrosComponent {
   }
 
 
-  constructor(private equipoService: EquipoService, private router:Router,private loadingService: LoadingService, private http: HttpClient) {}
+  constructor(private equipoService: EquipoService, private router:Router,private loadingService: LoadingService, private http: HttpClient, private gymBdService: GymBdService) {}
 
   ngOnInit(): void {
   this.integrantes = this.equipoService.getIntegrantes();
@@ -104,39 +105,63 @@ esFechaEnRangoValido(): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
-    onSubmit() {
+    async onSubmit() {
   this.submitted = true;
+
   if (this.isValid()) {
-    const quejasGuardadas = JSON.parse(localStorage.getItem('quejas') || '[]');
-    if (this.editando && this.indiceEditando > -1) {
-      quejasGuardadas[this.indiceEditando] = this.queja;
-    } else {
-      quejasGuardadas.push(this.queja);
+    try {
+      const confirmacion = await Swal.fire({
+        title: '¿Confirmar queja?',
+        html: `
+          <p><strong>Nombre:</strong> ${this.queja.nombre}</p>
+          <p><strong>Correo:</strong> ${this.queja.correo}</p>
+          <p><strong>Fecha:</strong> ${this.queja.fecha}</p>
+          <p><strong>Gravedad:</strong> ${this.queja.gravedad}</p>
+          <p><strong>Motivo:</strong> ${this.queja.motivo}</p>
+          <p><strong>Opciones:</strong> ${this.queja.opciones.join(', ')}</p>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, enviar',
+        cancelButtonText: 'Cancelar'
+      });
+
+      if (confirmacion.isConfirmed) {
+        await this.gymBdService.agregarQueja(this.queja);
+
+        await Swal.fire({
+          icon: 'success',
+          title: '¡Queja enviada!',
+          text: 'Gracias por compartir tu opinión. Trabajaremos en ello.'
+        });
+
+        this.queja = {
+          nombre: '',
+          correo: '',
+          motivo: '',
+          fecha: '',
+          opciones: [],
+          gravedad: ''
+        };
+        this.submitted = false;
+        this.editando = false;
+        this.indiceEditando = -1;
+
+        localStorage.removeItem('registroEditando');
+      } else {
+        await Swal.fire({
+          icon: 'info',
+          title: 'Envío cancelado',
+          text: 'No se guardó la queja.'
+        });
+      }
+    } catch (error) {
+      console.error('Error al guardar queja en Firestore:', error);
+      await Swal.fire('Error', 'No se pudo guardar la queja.', 'error');
     }
-    localStorage.setItem('quejas', JSON.stringify(quejasGuardadas));
-    localStorage.removeItem('registroEditando');
-
-    Swal.fire({
-      icon: 'success',
-      title: this.editando ? '¡Queja actualizada!' : '¡Queja registrada!',
-      text: this.editando
-        ? 'Tu queja ha sido actualizada correctamente.'
-        : 'Gracias por compartir tu opinión. Trabajaremos en ello.',
-    });
-
-    this.queja = {
-      nombre: '',
-      correo: '',
-      motivo: '',
-      fecha: '',
-      opciones: [],
-      gravedad: ''
-    };
-    this.submitted = false;
-    this.editando = false;
-    this.indiceEditando = -1;
   }
 }
+
 
 
 
