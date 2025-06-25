@@ -45,6 +45,11 @@
             <a class="nav-link text-primary fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#adminSignupModal">Sign Up Ad</a>
           </li>-->
         }
+          <li class="nav-item">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#qrModal">
+              Generar QR
+            </button>
+          </li>
       </ul>
       
       @if (userTipo === 'admin') {
@@ -273,6 +278,18 @@
           <!-- Invisible para Firebase reCAPTCHA 
           <div id="recaptcha-container" style="display:none;"></div>-->
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+      </div>
+      <div class="modal-body">
+        <app-qr></app-qr>
       </div>
     </div>
   </div>

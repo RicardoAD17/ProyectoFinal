@@ -22,7 +22,6 @@ export class QrComponent {
     this.http.get(`http://localhost:3000/api/qr-data/${userId}`).subscribe({
       next: (res: any) => {
         const datos = JSON.stringify(res);
-        this.generarQR(datos);
       },
       error: (err) => console.error('Error al obtener datos:', err)
     });

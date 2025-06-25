@@ -18,6 +18,7 @@ import { LoadingService } from '../../services/loading.service';
 import { HttpClient } from '@angular/common/http';
 import { GithubAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { QrComponent } from '../qr/qr.component';
 
 declare var bootstrap: any;
 
@@ -41,7 +42,7 @@ export function passwordValidator(control: AbstractControl): ValidationErrors | 
   standalone:true,
   imports: [MatButtonModule,MatMenuModule,RouterModule,CommonModule,ReactiveFormsModule,RecaptchaModule,
     MatFormFieldModule,
-    MatInputModule,
+    MatInputModule,QrComponent
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
