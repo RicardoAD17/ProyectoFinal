@@ -137,6 +137,7 @@ export class NavbarComponent implements OnInit {
           uid
         }));
         this.userTipo = 'admin';
+            localStorage.setItem('logueado', 'true');
         Swal.fire('Administrador', `Bienvenido administrador ${adminData['nombre']}`, 'success');
         this.router.navigate(['/tablas']);
       } else {
@@ -154,6 +155,7 @@ export class NavbarComponent implements OnInit {
             uid
           }));
           this.userTipo = 'usuario';
+              localStorage.setItem('logueado', 'true');
           Swal.fire('Bienvenido', `Hola ${userData['nombre']}`, 'success');
         } else {
           this.currentAdmin = null;
@@ -195,7 +197,7 @@ export class NavbarComponent implements OnInit {
       }));
 
       this.currentAdmin = { username: correo, nombre };
-
+    localStorage.setItem('logueado', 'true');
       Swal.fire('¡Bienvenido!', `Hola ${nombre}, has iniciado sesión con GitHub.`, 'success');
 
       // Cierra el modal si está abierto
