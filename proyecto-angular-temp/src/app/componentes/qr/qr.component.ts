@@ -29,9 +29,9 @@ export class QrComponent {
   }
 
   generarQR(texto: string) {
-    QRCode.toCanvas(this.canvas.nativeElement, texto, { width: 256 }, error => {
-      if (error) console.error(error);
-      else console.log('QR generado');
-    });
+QRCode.toCanvas(this.canvas.nativeElement, texto, { width: 256 }, (error?: Error | null) => {
+  if (error) console.error(error);
+  else console.log('QR generado');
+});
   }
 }
